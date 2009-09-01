@@ -1,0 +1,67 @@
+#ifndef HEYTRACK_H
+#define HEYTRACK_H
+
+#include <QWidget>
+#include <QSystemTrayIcon>
+
+class QNetworkAccessManager;
+class QLabel;
+class QTimer;
+class QNetworkReply;
+
+/**
+ * @brief Widget zobrazující aktuální přehrávanou píseň na rádiu Hey
+ *
+ * Aktuálně přehrávaná píseň se zobrazí v okně. Tato informace je zobrazena i
+ * v tray ikoně. Pokud se právě nic nepřehrává (zprávy, ...), je v trayi
+ * zobrazena ikonka pauzy.
+ */
+class HeyTrack: public QWidget {
+    Q_OBJECT
+
+    public:
+        /**
+         * @brief Konstruktor
+         *
+         * Inicializuje síť, tray ikonu a okno
+         * @param   parent      Rodičovský widget
+         */
+        HeyTrack(QWidget* parent = 0);
+
+    private:
+        QTimer* timer;              /** @brief Časovač pro zjištění další skladby */
+        QLabel* nowPlaying;         /** @brief Label, co se právě hraje */
+        QNetworkAccessManager* net; /** @brief HTTP spojení na heybrno.cz */
+        QSystemTrayIcon* tray;      /** @brief Tray ikona */
+
+    private slots:
+        /**
+         * @brief Odeslání GET požadavku na webovou stránku
+         *
+         * Poté, co je požadavek splněn, volá se automaticky
+         * HeyTrack::updateTrack()
+         */
+        void getUpdate();
+
+        /**
+         * @brief Aktualizace názvu písně
+         *
+         * Je volán automaticky po získání nových dat z HeyTrack::getUpdate().
+         * Aktualizuje název skladby v okně, v trayi a v hintu traye. Pokud se
+         * právě něco přehrává, vyhodí bublinu nad tray ikonou.
+         *
+         * @param   reply   Ukazatel na objekt s odpovědí ze serveru
+         */
+        void updateTrack(QNetworkReply* reply);
+
+        /**
+         * @brief Schová / zobrazí okno
+         *
+         * Spouštěno po kliknutí na tray ikonu.
+         *
+         * @param   reason  Důvod aktivace tray ikony (spouštěno jen při kliknutí).
+         */
+        void toggleVisibility(QSystemTrayIcon::ActivationReason reason);
+};
+
+#endif
