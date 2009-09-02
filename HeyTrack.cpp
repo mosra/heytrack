@@ -58,7 +58,7 @@ void HeyTrack::updateTrack(QNetworkReply* reply) {
     /* Do konce písně zbývá 0 == nic se nehraje, aktualizace hned za 5s */
     if(str[2].toInt() == 0) {
         nowPlaying->setText(tr("Právě se nic nehraje"));
-        tray->setToolTip(tr("Radio Hey: práv*ě se nic nehraje"));
+        tray->setToolTip(tr("Radio Hey: právě se nic nehraje"));
         tray->setIcon(style()->standardIcon(QStyle::SP_MediaPause).pixmap(16,16));
         timer->start(5000);
 
