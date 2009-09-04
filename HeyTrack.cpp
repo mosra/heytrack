@@ -70,6 +70,9 @@ void HeyTrack::updateTrack(QNetworkReply* reply) {
         tray->setToolTip("Radio Hey: " + str[0] + " - " + str[1]);
         timer->start(str[2].toInt());
     }
+
+    /* Uklidíme po sobě */
+    delete reply;
 }
 
 /* Přepínání viditelnosti okna */
