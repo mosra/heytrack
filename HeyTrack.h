@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QSystemTrayIcon>
+#include <QSettings>
 
 class QNetworkAccessManager;
 class QLabel;
@@ -42,6 +43,8 @@ class HeyTrack: public QWidget {
         QLabel* nowPlaying;         /** @brief Label, co se právě hraje */
         QNetworkAccessManager* net; /** @brief HTTP spojení na heybrno.cz */
         QSystemTrayIcon* tray;      /** @brief Tray ikona */
+
+        QSettings settings;         /** @brief Nastavení programu */
 
     private slots:
         /**

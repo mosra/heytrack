@@ -4,7 +4,7 @@ find_package(Qt4 REQUIRED)
 
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
-set(HeyTrackSRCS HeyTrack.cpp main.cpp)
-qt4_wrap_cpp(HeyTrackMOC HeyTrack.h)
+set(HeyTrackSRCS HeyTrack.cpp HeySettings.cpp main.cpp)
+qt4_wrap_cpp(HeyTrackMOC HeyTrack.h HeySettings.h)
 add_executable(HeyTrack ${HeyTrackSRCS} ${HeyTrackMOC})
 target_link_libraries(HeyTrack ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTNETWORK_LIBRARY})

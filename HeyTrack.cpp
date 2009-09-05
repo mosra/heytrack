@@ -4,7 +4,6 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QTimer>
-
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -15,8 +14,10 @@
 #include <QCloseEvent>
 #include <QAction>
 
+#include "HeySettings.h"
+
 /* Konstruktor */
-HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
+HeyTrack::HeyTrack(QWidget* parent): QWidget(parent), settings(QSettings::IniFormat) {
     /* Titulek a ikona okna */
     setWindowTitle(tr("Radio Hey - právě se hraje"));
     setWindowIcon(style()->standardIcon(QStyle::SP_MediaPlay).pixmap(16,16));
@@ -43,12 +44,9 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
 
     /* Kontextové menu tray ikony */
     QMenu* menu = new QMenu(this);
-
-    QAction* settingsAction = menu->addAction(
+    menu->addAction(
         style()->standardIcon(QStyle::SP_DriveFDIcon).pixmap(16,16),
         tr("Nastavení"), this, SLOT(openSettings()));
-    settingsAction->setDisabled(true);
-
     menu->addAction(
         style()->standardIcon(QStyle::SP_DialogCloseButton).pixmap(16,16),
         tr("Ukončit"), qApp, SLOT(quit()));
@@ -106,5 +104,8 @@ void HeyTrack::toggleVisibility(QSystemTrayIcon::ActivationReason reason) {
 
 /* Otevření okna s nastavením */
 void HeyTrack::openSettings() {
+    HeySettings window(&settings);
 
+    /* Vynucená modálnost (program je pozastaven do doby, než se dialog uzavře) */
+    window.exec();
 }
