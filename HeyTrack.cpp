@@ -13,11 +13,13 @@
 #include <QApplication>
 #include <QCloseEvent>
 #include <QAction>
+#include <QFile>
+#include <QProcess>
 
 #include "HeySettings.h"
 
 /* Konstruktor */
-HeyTrack::HeyTrack(QWidget* parent): QWidget(parent), settings(QSettings::IniFormat) {
+HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
     /* Titulek a ikona okna */
     setWindowTitle(tr("Radio Hey - právě se hraje"));
     setWindowIcon(style()->standardIcon(QStyle::SP_MediaPlay).pixmap(16,16));
@@ -61,6 +63,28 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent), settings(QSettings::IniFor
     setFixedSize(320,50);
 }
 
+/* Uložení songu do souboru */
+bool HeyTrack::saveIcesTune(const QString& artist, const QString& title) {
+    QString fileName = settings.value("icesTuneFile", "ices-tune").toString();
+    if(fileName.isEmpty())
+        return false;
+
+    QFile file(fileName);
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        return false;
+
+    QString contents;
+    if(!artist.isEmpty())
+        contents = "title=" + title + "\nartist=" + artist + "\nalbum=\nyear=\nlength=";
+
+    file.write(contents.toUtf8());
+    file.close();
+
+    QStringList arguments;
+    arguments << "-SIGUSR1" << "ices";
+    QProcess::execute("/usr/bin/killall", arguments);
+}
+
 /* Získání aktuálního songu */
 void HeyTrack::getUpdate() {
     net->get(QNetworkRequest(QUrl("http://www.radiohey.cz/pravehraje-brno/now-read.php")));
@@ -80,6 +104,10 @@ void HeyTrack::updateTrack(QNetworkReply* reply) {
         tray->setToolTip(tr("Radio Hey: právě se nic nehraje"));
         tray->setIcon(style()->standardIcon(QStyle::SP_MediaPause).pixmap(16,16));
 
+        /* Pokud je povoleno, uložíme Ices Tune */
+        if(settings.value("saveIcesTune", false).toBool())
+            saveIcesTune(tr("Radio Hey"), tr("Radio Hey"));
+
         /* Aktualizace hned za 5 s */
         timer->start(5000);
 
@@ -92,6 +120,10 @@ void HeyTrack::updateTrack(QNetworkReply* reply) {
         tray->showMessage(tr("Radio Hey: právě se hraje"), str[0] + " - " +str[1]);
         tray->setIcon(style()->standardIcon(QStyle::SP_MediaPlay).pixmap(16,16));
         tray->setToolTip("Radio Hey: " + str[0] + " - " + str[1]);
+
+        /* Pokud je povoleno, uložíme Ices Tune */
+        if(settings.value("saveIcesTune", false).toBool())
+            saveIcesTune(str[0], str[1]);
 
         /* Aktualizace, až píseň skončí */
         timer->start(str[2].toInt());

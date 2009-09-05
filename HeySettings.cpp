@@ -2,9 +2,10 @@
 
 #include <QCheckBox>
 #include <QDialogButtonBox>
-#include <QVBoxLayout>
+#include <QBoxLayout>
 #include <QSettings>
 #include <QLabel>
+#include <QLineEdit>
 
 /* Konstruktor */
 HeySettings::HeySettings(QSettings* _settings): settings(_settings) {
@@ -15,6 +16,8 @@ HeySettings::HeySettings(QSettings* _settings): settings(_settings) {
     showMainWindow->setDisabled(true);
     saveIcesTune = new QCheckBox(
         tr("Zapisovat aktuální song do ~/.ices-tune"));
+    icesTuneFile = new QLineEdit(
+        settings->value("icesTuneFile", "ices-tune").toString());
 
     /* Tlačítka */
     QDialogButtonBox* buttons =
@@ -25,9 +28,27 @@ HeySettings::HeySettings(QSettings* _settings): settings(_settings) {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(showMainWindow);
     layout->addWidget(saveIcesTune);
-    layout->addWidget(new QLabel(
-        tr("<em>Tuto volbu zaškrtněte jen pokud opravdu víte, co děláte.</em>")));
+    QLabel* knowWhatYouDo = new QLabel(
+        tr("<em>Tuto volbu zaškrtněte jen pokud opravdu víte, co děláte.</em>"));
+    layout->addWidget(knowWhatYouDo);
+
+    QHBoxLayout* lineEditLayout = new QHBoxLayout();
+    QLabel* icesTuneFileLabel = new QLabel(tr("Cesta k souboru IcesTune"));
+    lineEditLayout->addWidget(icesTuneFileLabel);
+    lineEditLayout->addWidget(icesTuneFile);
+
+    layout->addLayout(lineEditLayout);
     layout->addWidget(buttons);
+
+    /* Při odškrtnutí saveIcesTune zašednout volby pod tím */
+    connect(saveIcesTune, SIGNAL(toggled(bool)), knowWhatYouDo, SLOT(setEnabled(bool)));
+    connect(saveIcesTune, SIGNAL(toggled(bool)), icesTuneFile, SLOT(setEnabled(bool)));
+    connect(saveIcesTune, SIGNAL(toggled(bool)), icesTuneFileLabel, SLOT(setEnabled(bool)));
+
+    /* Defaultně se Ices Tune neukládá, zašednout */
+    knowWhatYouDo->setDisabled(true);
+    icesTuneFileLabel->setDisabled(true);
+    knowWhatYouDo->setDisabled(true);
 
     /* Zaškrtání podle nastavení */
     if(settings->value("showMainWindow", true).toBool())
@@ -40,5 +61,6 @@ HeySettings::HeySettings(QSettings* _settings): settings(_settings) {
 void HeySettings::accept() {
     settings->setValue("showMainWindow", showMainWindow->isChecked());
     settings->setValue("saveIcesTune", saveIcesTune->isChecked());
+    settings->setValue("icesTuneFile", icesTuneFile->text());
     done(QDialog::Accepted);
 }

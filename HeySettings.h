@@ -5,12 +5,13 @@
 
 class QCheckBox;
 class QSettings;
+class QLineEdit;
 
 /**
  * @brief Dialog s nastavením HeyTrack
  *
  * Umožňuje nastavení, zda zobrazit po startu okno aplikace a zda zapisovat
- * aktuální přehrávaný song do <tt>~/.ices-tune</tt>.
+ * aktuální přehrávaný song do Ices Tune.
  */
 class HeySettings: public QDialog {
     Q_OBJECT
@@ -26,7 +27,8 @@ class HeySettings: public QDialog {
     private:
         QSettings* settings;        /** @brief Ukazatel na nastavení */
         QCheckBox *showMainWindow,  /** @brief Zda ukazovat okno aplikace */
-            *saveIcesTune;          /** @brief Zda zapisovat ~/.ices-tune */
+            *saveIcesTune;          /** @brief Zda zapisovat soubor IcesTune */
+        QLineEdit* icesTuneFile;    /** @brief Cesta k souboru IcesTune */
 
     private slots:
         virtual void accept();      /** @brief Potvrzení dialogu */

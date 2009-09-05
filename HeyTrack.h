@@ -4,12 +4,12 @@
 #include <QWidget>
 #include <QSystemTrayIcon>
 #include <QSettings>
+#include <QCloseEvent>
 
 class QNetworkAccessManager;
 class QLabel;
 class QTimer;
 class QNetworkReply;
-class QCloseEvent;
 
 /**
  * @brief Widget zobrazující aktuální přehrávanou píseň na rádiu Hey
@@ -39,6 +39,13 @@ class HeyTrack: public QWidget {
          */
         inline virtual void closeEvent(QCloseEvent* event)
             { hide(); event->ignore(); }
+
+        /**
+         * @brief Zapsání songu do souboru
+         *
+         * Zapíše song do souboru Ices Tune.
+         */
+        bool saveIcesTune(const QString& artist, const QString& title);
 
         QTimer* timer;              /** @brief Časovač pro zjištění další skladby */
         QLabel* nowPlaying;         /** @brief Label, co se právě hraje */
