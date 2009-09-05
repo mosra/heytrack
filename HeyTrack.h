@@ -37,7 +37,8 @@ class HeyTrack: public QWidget {
          * Okno nezavře, ale schová do traye
          * @param   event       Ukazatel na událost
          */
-        virtual void closeEvent(QCloseEvent* event);
+        inline virtual void closeEvent(QCloseEvent* event)
+            { hide(); event->ignore(); }
 
         QTimer* timer;              /** @brief Časovač pro zjištění další skladby */
         QLabel* nowPlaying;         /** @brief Label, co se právě hraje */

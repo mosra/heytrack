@@ -61,11 +61,6 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent), settings(QSettings::IniFor
     setFixedSize(320,50);
 }
 
-/* Událost zavření okna */
-void HeyTrack::closeEvent(QCloseEvent* event) {
-    hide(); event->ignore();
-}
-
 /* Získání aktuálního songu */
 void HeyTrack::getUpdate() {
     net->get(QNetworkRequest(QUrl("http://www.radiohey.cz/pravehraje-brno/now-read.php")));
@@ -76,19 +71,29 @@ void HeyTrack::updateTrack(QNetworkReply* reply) {
     /* Překódujeme reply z UTF-8 a rozsekáme podle %% do pole */
     QStringList str = QString::fromUtf8(reply->readAll().data()).split("%%");
 
-    /* Do konce písně zbývá 0 == nic se nehraje, aktualizace hned za 5s */
+    /* Do konce písně zbývá 0 == nic se nehraje */
     if(str[2].toInt() == 0) {
+        /* Změna labelu v okně */
         nowPlaying->setText(tr("Právě se nic nehraje"));
+
+        /* Změna tooltipu a ikony traye na pauzu */
         tray->setToolTip(tr("Radio Hey: právě se nic nehraje"));
         tray->setIcon(style()->standardIcon(QStyle::SP_MediaPause).pixmap(16,16));
+
+        /* Aktualizace hned za 5 s */
         timer->start(5000);
 
     /* Přehrává se, příště budeme aktualizovat, až tato píseň skončí */
     } else {
+        /* Změna labelu v okně */
         nowPlaying->setText("<strong>" + str[0] + "</strong> - " + str[1]);
+
+        /* Ukázání zprávy, změna tooltipu a ikony traye na play */
         tray->showMessage(tr("Radio Hey: právě se hraje"), str[0] + " - " +str[1]);
         tray->setIcon(style()->standardIcon(QStyle::SP_MediaPlay).pixmap(16,16));
         tray->setToolTip("Radio Hey: " + str[0] + " - " + str[1]);
+
+        /* Aktualizace, až píseň skončí */
         timer->start(str[2].toInt());
     }
 
