@@ -63,6 +63,12 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
     setFixedSize(320,50);
 }
 
+/* Destruktor */
+HeyTrack::~HeyTrack() {
+    /* Smazání aktuální přehrávané skladby */
+    saveIcesTune("", "");
+}
+
 /* Uložení songu do souboru */
 bool HeyTrack::saveIcesTune(const QString& artist, const QString& title) {
     QString fileName = settings.value("icesTuneFile", "ices-tune").toString();
@@ -73,9 +79,7 @@ bool HeyTrack::saveIcesTune(const QString& artist, const QString& title) {
     if(!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
         return false;
 
-    QString contents;
-    if(!artist.isEmpty())
-        contents = "title=" + title + "\nartist=" + artist + "\nalbum=\nyear=\nlength=";
+    QString contents = "title=" + title + "\nartist=" + artist + "\nalbum=\nyear=\nlength=";
 
     file.write(contents.toUtf8());
     file.close();

@@ -30,6 +30,13 @@ class HeyTrack: public QWidget {
          */
         HeyTrack(QWidget* parent = 0);
 
+        /**
+         * @brief Destruktor
+         *
+         * Smaže aktuální přehrávanou skladbu v IcesTune
+         */
+        ~HeyTrack();
+
     private:
         /**
          * @brief Událost zavření okna
