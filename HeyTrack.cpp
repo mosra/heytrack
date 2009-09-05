@@ -10,6 +10,10 @@
 #include <QNetworkReply>
 #include <QUrl>
 #include <QSystemTrayIcon>
+#include <QMenu>
+#include <QApplication>
+#include <QCloseEvent>
+#include <QAction>
 
 /* Konstruktor */
 HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
@@ -34,15 +38,34 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
     /* Tray ikona */
     tray = new QSystemTrayIcon(this);
     tray->setIcon(style()->standardIcon(QStyle::SP_MediaStop).pixmap(16,16));
-    tray->show();
     connect(tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(toggleVisibility(QSystemTrayIcon::ActivationReason)));
+
+    /* Kontextové menu tray ikony */
+    QMenu* menu = new QMenu(this);
+
+    QAction* settingsAction = menu->addAction(
+        style()->standardIcon(QStyle::SP_DriveFDIcon).pixmap(16,16),
+        tr("Nastavení"), this, SLOT(openSettings()));
+    settingsAction->setDisabled(true);
+
+    menu->addAction(
+        style()->standardIcon(QStyle::SP_DialogCloseButton).pixmap(16,16),
+        tr("Ukončit"), qApp, SLOT(quit()));
+
+    tray->setContextMenu(menu);
+    tray->show();
 
     /* První aktualizace */
     timer->start(1000);
 
     /* Fixní velikost okna */
     setFixedSize(320,50);
+}
+
+/* Událost zavření okna */
+void HeyTrack::closeEvent(QCloseEvent* event) {
+    hide(); event->ignore();
 }
 
 /* Získání aktuálního songu */
@@ -79,4 +102,9 @@ void HeyTrack::updateTrack(QNetworkReply* reply) {
 void HeyTrack::toggleVisibility(QSystemTrayIcon::ActivationReason reason) {
     if(reason == QSystemTrayIcon::Trigger)
         isHidden() ? show() : hide();
+}
+
+/* Otevření okna s nastavením */
+void HeyTrack::openSettings() {
+
 }

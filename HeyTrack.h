@@ -8,6 +8,7 @@ class QNetworkAccessManager;
 class QLabel;
 class QTimer;
 class QNetworkReply;
+class QCloseEvent;
 
 /**
  * @brief Widget zobrazující aktuální přehrávanou píseň na rádiu Hey
@@ -29,6 +30,14 @@ class HeyTrack: public QWidget {
         HeyTrack(QWidget* parent = 0);
 
     private:
+        /**
+         * @brief Událost zavření okna
+         *
+         * Okno nezavře, ale schová do traye
+         * @param   event       Ukazatel na událost
+         */
+        virtual void closeEvent(QCloseEvent* event);
+
         QTimer* timer;              /** @brief Časovač pro zjištění další skladby */
         QLabel* nowPlaying;         /** @brief Label, co se právě hraje */
         QNetworkAccessManager* net; /** @brief HTTP spojení na heybrno.cz */
@@ -62,6 +71,13 @@ class HeyTrack: public QWidget {
          * @param   reason  Důvod aktivace tray ikony (spouštěno jen při kliknutí).
          */
         void toggleVisibility(QSystemTrayIcon::ActivationReason reason);
+
+        /**
+         * @brief Otevření menu s nastavením
+         *
+         * Spuštěno po kliknutí na položku kontextového menu tray ikony
+         */
+        void openSettings();
 };
 
 #endif
