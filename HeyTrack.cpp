@@ -127,7 +127,7 @@ void HeyTrack::updateTrack(QNetworkReply* reply) {
 
         /* Pokud je povoleno, uložíme Ices Tune */
         if(settings.value("saveIcesTune", false).toBool())
-            saveIcesTune(str[0], str[1]);
+            saveIcesTune(tr("Radio Hey: ") + str[0], str[1]);
 
         /* Aktualizace, až píseň skončí */
         timer->start(str[2].toInt());
