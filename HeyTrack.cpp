@@ -134,7 +134,7 @@ void HeyTrack::updateTrack(QNetworkReply* reply) {
     }
 
     /* Uklidíme po sobě */
-    delete reply;
+    reply->deleteLater();
 }
 
 /* Přepínání viditelnosti okna */
