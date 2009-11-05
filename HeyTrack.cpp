@@ -91,7 +91,14 @@ bool HeyTrack::saveIcesTune(const QString& artist, const QString& title) {
 
 /* Získání aktuálního songu */
 void HeyTrack::getUpdate() {
+    /* Už nechodí (předělali web) */
     net->get(QNetworkRequest(QUrl("http://www.radiohey.cz/pravehraje-brno/now-read.php")));
+    /**
+    @todo Nová URL: (počítat RAND! - 0-100)
+    Teď to ale na ABRadio nechodí (furt Tango - So s tím sklem a U2 - Starring
+    At the Sun), na radiohey.cz nic takového už neni.
+    static.abradio.cz/data/ct/108-popup.json?stations_id=108&popup=true&rand=22.331082066248875
+    */
 }
 
 /* Aktualizace textu aktuální písně */
@@ -100,7 +107,7 @@ void HeyTrack::updateTrack(QNetworkReply* reply) {
     QStringList str = QString::fromUtf8(reply->readAll().data()).split("%%");
 
     /* Do konce písně zbývá 0 == nic se nehraje */
-    if(str[2].toInt() == 0) {
+    if(str.count() < 3 || str[2].toInt() == 0) {
         /* Změna labelu v okně */
         nowPlaying->setText(tr("Právě se nic nehraje"));
 
