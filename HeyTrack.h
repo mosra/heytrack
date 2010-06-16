@@ -60,6 +60,7 @@ class HeyTrack: public QWidget {
         QSystemTrayIcon* tray;      /**< @brief Tray ikona */
 
         QSettings settings;         /**< @brief Nastavení programu */
+        quint32 lastUpdate;         /**< @brief Poslední aktualizace stavu na serveru */
 
     private slots:
         /**

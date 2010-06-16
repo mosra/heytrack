@@ -15,6 +15,10 @@
 #include <QAction>
 #include <QFile>
 #include <QProcess>
+#include <QtCore/QDebug>
+#include <QtXmlPatterns/QXmlQuery>
+
+#include <qjson/parser.h>
 
 #include "HeySettings.h"
 
@@ -91,56 +95,66 @@ bool HeyTrack::saveIcesTune(const QString& artist, const QString& title) {
 
 /* Získání aktuálního songu */
 void HeyTrack::getUpdate() {
-    /* Už nechodí (předělali web) */
-    net->get(QNetworkRequest(QUrl("http://www.radiohey.cz/pravehraje-brno/now-read.php")));
-    /**
-    @todo Nová URL: (počítat RAND! - 0-100)
-    Teď to ale na ABRadio nechodí (furt Tango - So s tím sklem a U2 - Starring
-    At the Sun), na radiohey.cz nic takového už neni.
-    static.abradio.cz/data/ct/108-popup.json?stations_id=108&popup=true&rand=22.331082066248875
-    */
+    net->get(QNetworkRequest(QUrl("http://static.abradio.cz/data/ct/36.json")));
 }
 
 /* Aktualizace textu aktuální písně */
 void HeyTrack::updateTrack(QNetworkReply* reply) {
-    /* Překódujeme reply z UTF-8 a rozsekáme podle %% do pole */
-    QStringList str = QString::fromUtf8(reply->readAll().data()).split("%%");
+    QJson::Parser parser;
+    QXmlQuery query;
+    QString artist;
+    QString track;
+    bool parsedOk = false;
 
-    /* Do konce písně zbývá 0 == nic se nehraje */
-    if(str.count() < 3 || str[2].toInt() == 0) {
-        /* Změna labelu v okně */
-        nowPlaying->setText(tr("Právě se nic nehraje"));
-
-        /* Změna tooltipu a ikony traye na pauzu */
-        tray->setToolTip(tr("Radio Hey: právě se nic nehraje"));
-        tray->setIcon(style()->standardIcon(QStyle::SP_MediaPause).pixmap(16,16));
-
-        /* Pokud je povoleno, uložíme Ices Tune */
-        if(settings.value("saveIcesTune", false).toBool())
-            saveIcesTune(tr("Radio Hey"), tr("Radio Hey"));
-
-        /* Aktualizace hned za 5 s */
-        timer->start(5000);
-
-    /* Přehrává se, příště budeme aktualizovat, až tato píseň skončí */
-    } else {
-        /* Změna labelu v okně */
-        nowPlaying->setText("<strong>" + str[0] + "</strong> - " + str[1]);
-
-        /* Ukázání zprávy, změna tooltipu a ikony traye na play */
-        tray->showMessage(tr("Radio Hey: právě se hraje"), str[0] + " - " +str[1]);
-        tray->setIcon(style()->standardIcon(QStyle::SP_MediaPlay).pixmap(16,16));
-        tray->setToolTip("Radio Hey: " + str[0] + " - " + str[1]);
-
-        /* Pokud je povoleno, uložíme Ices Tune */
-        if(settings.value("saveIcesTune", false).toBool())
-            saveIcesTune(tr("Radio Hey: ") + str[0], str[1]);
-
-        /* Aktualizace, až píseň skončí */
-        timer->start(str[2].toInt());
+    /* Parse server result */
+    QVariantMap result = parser.parse(reply->readAll().data(), &parsedOk).toMap();
+    if (!parsedOk) {
+        qFatal("An error occurred during parsing JSON");
+        exit(1);
     }
 
-    /* Uklidíme po sobě */
+    /* If track wasn't updated, nothing to do */
+    quint32 update = result["lastchange"].toInt();
+    if(lastUpdate == update && update != 0) return;
+    lastUpdate = update;
+
+    /* Root item for getting data*/
+    query.setFocus("<root>" + result["html"].toString().replace("&nbsp;","") + "</root>");
+
+    /* Artist */
+    query.setQuery("root/li[@class='current']/span[@class='artistname']//text()");
+    if (!query.isValid()) {
+        qFatal("An error occurred during parsing artist");
+        exit(1);
+    }
+    query.evaluateTo(&artist);
+    artist = artist.trimmed();
+
+    /* Track name */
+    query.setQuery("root/li[@class='current']/span[@class='trackname']//text()");
+    if (!query.isValid()) {
+        qFatal("An error occurred during parsing track");
+        exit(1);
+    }
+    query.evaluateTo(&track);
+    track = track.trimmed();
+
+    /* Update window label */
+    nowPlaying->setText("<strong>" + artist + "</strong> - " + track);
+
+    /* Tray icon message */
+    tray->showMessage(tr("Rockradio: právě se hraje"), artist + " - " +track);
+    tray->setIcon(style()->standardIcon(QStyle::SP_MediaPlay).pixmap(16,16));
+    tray->setToolTip("Rockradio: " + artist + " - " + track);
+
+    /* If enabled, save Ices Tune */
+    if(settings.value("saveIcesTune", false).toBool())
+        saveIcesTune(tr("Rockradio: ") + artist, track);
+
+    /* Next update after 20 seconds */
+    timer->start(20*1000);
+
+    /* Cleanup server reply */
     reply->deleteLater();
 }
 
