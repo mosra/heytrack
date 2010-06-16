@@ -54,12 +54,12 @@ class HeyTrack: public QWidget {
          */
         bool saveIcesTune(const QString& artist, const QString& title);
 
-        QTimer* timer;              /** @brief Časovač pro zjištění další skladby */
-        QLabel* nowPlaying;         /** @brief Label, co se právě hraje */
-        QNetworkAccessManager* net; /** @brief HTTP spojení na heybrno.cz */
-        QSystemTrayIcon* tray;      /** @brief Tray ikona */
+        QTimer* timer;              /**< @brief Časovač pro zjištění další skladby */
+        QLabel* nowPlaying;         /**< @brief Label, co se právě hraje */
+        QNetworkAccessManager* net; /**< @brief HTTP spojení na heybrno.cz */
+        QSystemTrayIcon* tray;      /**< @brief Tray ikona */
 
-        QSettings settings;         /** @brief Nastavení programu */
+        QSettings settings;         /**< @brief Nastavení programu */
 
     private slots:
         /**
