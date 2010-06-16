@@ -17,6 +17,8 @@ class QNetworkReply;
  * Aktuálně přehrávaná píseň se zobrazí v okně. Tato informace je zobrazena i
  * v tray ikoně. Pokud se právě nic nepřehrává (zprávy, ...), je v trayi
  * zobrazena ikonka pauzy.
+ * @todo Separate GUI from logic
+ * @todo Globalize for all stations
  */
 class HeyTrack: public QWidget {
     Q_OBJECT
@@ -77,7 +79,6 @@ class HeyTrack: public QWidget {
          * Je volán automaticky po získání nových dat z HeyTrack::getUpdate().
          * Aktualizuje název skladby v okně, v trayi a v hintu traye. Pokud se
          * právě něco přehrává, vyhodí bublinu nad tray ikonou.
-         *
          * @param   reply   Ukazatel na objekt s odpovědí ze serveru
          */
         void updateTrack(QNetworkReply* reply);
@@ -86,7 +87,6 @@ class HeyTrack: public QWidget {
          * @brief Schová / zobrazí okno
          *
          * Spouštěno po kliknutí na tray ikonu.
-         *
          * @param   reason  Důvod aktivace tray ikony (spouštěno jen při kliknutí).
          */
         void toggleVisibility(QSystemTrayIcon::ActivationReason reason);

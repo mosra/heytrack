@@ -105,6 +105,8 @@ void HeyTrack::updateTrack(QNetworkReply* reply) {
     QString track;
     bool parsedOk = false;
 
+    /** @todo QMessageBox instead of debug otuput */
+
     /* Parse server result */
     QVariantMap result = parser.parse(reply->readAll().data(), &parsedOk).toMap();
     if (!parsedOk) {
