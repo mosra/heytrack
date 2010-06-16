@@ -1,10 +1,16 @@
 project(HeyTrack)
 cmake_minimum_required(VERSION 2.6)
-find_package(Qt4 REQUIRED)
 
-include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/modules/")
+
+find_package(Qt4 REQUIRED)
+find_package(QJSON REQUIRED)
+
+include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${QJSON_INCLUDE_DIRS})
+
+
 
 set(HeyTrackSRCS HeyTrack.cpp HeySettings.cpp main.cpp)
 qt4_wrap_cpp(HeyTrackMOC HeyTrack.h HeySettings.h)
 add_executable(HeyTrack ${HeyTrackSRCS} ${HeyTrackMOC})
-target_link_libraries(HeyTrack ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTNETWORK_LIBRARY})
+target_link_libraries(HeyTrack ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QJSON_LIBRARIES} ${QT_QTXMLPATTERNS_LIBRARY})
