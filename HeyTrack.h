@@ -1,10 +1,10 @@
 #ifndef HEYTRACK_H
 #define HEYTRACK_H
 
-#include <QWidget>
-#include <QSystemTrayIcon>
-#include <QSettings>
-#include <QCloseEvent>
+#include <QtCore/QSettings>
+#include <QtGui/QWidget>
+#include <QtGui/QSystemTrayIcon>
+#include <QtGui/QCloseEvent>
 
 class QNetworkAccessManager;
 class QLabel;

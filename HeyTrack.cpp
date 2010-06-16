@@ -1,21 +1,20 @@
 #include "HeyTrack.h"
 
-#include <QStyle>
-#include <QLabel>
-#include <QHBoxLayout>
-#include <QTimer>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QUrl>
-#include <QSystemTrayIcon>
-#include <QMenu>
-#include <QApplication>
-#include <QCloseEvent>
-#include <QAction>
-#include <QFile>
-#include <QProcess>
-#include <QtCore/QDebug>
+#include <QtCore/QTimer>
+#include <QtCore/QFile>
+#include <QtCore/QProcess>
+#include <QtCore/QUrl>
+#include <QtGui/QSystemTrayIcon>
+#include <QtGui/QMenu>
+#include <QtGui/QApplication>
+#include <QtGui/QCloseEvent>
+#include <QtGui/QAction>
+#include <QtGui/QStyle>
+#include <QtGui/QLabel>
+#include <QtGui/QHBoxLayout>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
 #include <QtXmlPatterns/QXmlQuery>
 
 #include <qjson/parser.h>
