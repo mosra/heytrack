@@ -1,5 +1,5 @@
-#include <QApplication>
-#include <QTextCodec>
+#include <QtGui/QApplication>
+#include <QtCore/QTextCodec>
 #include "HeyTrack.h"
 
 int main(int argc, char** argv)
@@ -9,6 +9,7 @@ int main(int argc, char** argv)
     app.setOrganizationName("Mosra");
 
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
     HeyTrack::Tray::HeyTrack foo;
     foo.show();

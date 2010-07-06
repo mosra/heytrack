@@ -1,5 +1,23 @@
-#ifndef HEYTRACK_H
-#define HEYTRACK_H
+#ifndef HeyTrack_Tray_HeyTrack_h
+#define HeyTrack_Tray_HeyTrack_h
+/*
+    Copyright © 2010 Vladimír Vondruš <mosra@centrum.cz>
+
+    This file is part of HeyTrack.
+
+    HeyTrack is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License version 3
+    only, as published by the Free Software Foundation.
+
+    HeyTrack is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU Lesser General Public License version 3 for more details.
+*/
+
+/** @file
+ * @brief Class HeyTrack::Tray::HeyTrack
+ */
 
 #include <QtCore/QSettings>
 #include <QtGui/QWidget>
@@ -7,6 +25,7 @@
 #include <QtGui/QCloseEvent>
 
 #include <Core/Track.h>
+#include <Core/Station.h>
 
 class QNetworkAccessManager;
 class QLabel;
@@ -21,90 +40,57 @@ namespace Core {
 
 namespace Tray {
 
-/**
- * @brief Widget zobrazující aktuální přehrávanou píseň na rádiu Hey
- *
- * Aktuálně přehrávaná píseň se zobrazí v okně. Tato informace je zobrazena i
- * v tray ikoně. Pokud se právě nic nepřehrává (zprávy, ...), je v trayi
- * zobrazena ikonka pauzy.
- * @todo Separate GUI from logic
- * @todo Globalize for all stations
- */
+/** @brief Widget displaying currently played track in a window and in tray */
 class HeyTrack: public QWidget {
     Q_OBJECT
 
     public:
-        /**
-         * @brief Konstruktor
-         *
-         * Inicializuje síť, tray ikonu a okno
-         * @param   parent      Rodičovský widget
-         */
+        /** @brief Constructor */
         HeyTrack(QWidget* parent = 0);
-
-        /**
-         * @brief Destruktor
-         *
-         * Smaže aktuální přehrávanou skladbu v IcesTune
-         */
-        ~HeyTrack();
 
     private:
         /**
-         * @brief Událost zavření okna
+         * @brief Event of closing window
          *
-         * Okno nezavře, ale schová do traye
-         * @param   event       Ukazatel na událost
+         * Window is not closed, but hidden in tray
+         * @param event     Close event
          */
         inline virtual void closeEvent(QCloseEvent* event)
             { hide(); event->ignore(); }
 
-        /**
-         * @brief Zapsání songu do souboru
-         *
-         * Zapíše song do souboru Ices Tune.
-         */
-        bool saveIcesTune(const QString& artist, const QString& title);
+        QTimer* timer;                  /**< @brief Timer for scheduling next update */
+        QLabel* nowPlaying;             /**< @brief Now playing label in the window */
+        Core::AbstractServer* server;   /**< @brief Stream server */
+        Core::Station station;          /**< @brief Currently displayed station */
+        QSystemTrayIcon* tray;          /**< @brief Tray icon */
 
-        QTimer* timer;              /**< @brief Časovač pro zjištění další skladby */
-        QLabel* nowPlaying;         /**< @brief Label, co se právě hraje */
-        Core::AbstractServer* server; /**< @brief Stream server */
-        QSystemTrayIcon* tray;      /**< @brief Tray ikona */
-
-        QSettings settings;         /**< @brief Nastavení programu */
-        quint32 lastUpdate;         /**< @brief Poslední aktualizace stavu na serveru */
+        QSettings settings;             /**< @brief Settings */
 
     private slots:
-        /**
-         * @brief Odeslání GET požadavku na webovou stránku
-         *
-         * Poté, co je požadavek splněn, volá se automaticky
-         * HeyTrack::updateTrack()
-         */
+        /** @brief Request track info update */
         void getUpdate();
 
         /**
-         * @brief Aktualizace názvu písně
+         * @brief Update track info
          *
-         * Je volán automaticky po získání nových dat z HeyTrack::getUpdate().
-         * Aktualizuje název skladby v okně, v trayi a v hintu Traye. Pokud se
-         * právě něco přehrává, vyhodí bublinu nad tray ikonou.
-         * @param   reply   Ukazatel na objekt s odpovědí ze serveru
+         * Called automatically after request from server. Updates track in
+         * window, in tray hint and shows tray message.
+         * @param t         Current track
          */
         void updateTrack(Core::Track t);
 
         /**
-         * @brief Schová / zobrazí okno
+         * @brief Show / hide window
          *
-         * Spouštěno po kliknutí na tray ikonu.
-         * @param   reason  Důvod aktivace tray ikony (spouštěno jen při kliknutí).
+         * Toggles visibility only after clicking on tray icon.
+         * @param reason    Activation reason
          */
         void toggleVisibility(QSystemTrayIcon::ActivationReason reason);
 
         /**
-         * @brief Otevření menu s nastavením
+         * @brief Open settings dialog
          *
-         * Spuštěno po kliknutí na položku kontextového menu tray ikony
+         * Called after clicking on item of tray icon context menu.
          */
         void openSettings();
 };
