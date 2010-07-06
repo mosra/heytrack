@@ -6,10 +6,20 @@
 #include <QtGui/QSystemTrayIcon>
 #include <QtGui/QCloseEvent>
 
+#include <Core/Track.h>
+
 class QNetworkAccessManager;
 class QLabel;
 class QTimer;
 class QNetworkReply;
+
+namespace HeyTrack {
+
+namespace Core {
+    class AbstractServer;
+}
+
+namespace Tray {
 
 /**
  * @brief Widget zobrazující aktuální přehrávanou píseň na rádiu Hey
@@ -58,7 +68,7 @@ class HeyTrack: public QWidget {
 
         QTimer* timer;              /**< @brief Časovač pro zjištění další skladby */
         QLabel* nowPlaying;         /**< @brief Label, co se právě hraje */
-        QNetworkAccessManager* net; /**< @brief HTTP spojení na heybrno.cz */
+        Core::AbstractServer* server; /**< @brief Stream server */
         QSystemTrayIcon* tray;      /**< @brief Tray ikona */
 
         QSettings settings;         /**< @brief Nastavení programu */
@@ -77,11 +87,11 @@ class HeyTrack: public QWidget {
          * @brief Aktualizace názvu písně
          *
          * Je volán automaticky po získání nových dat z HeyTrack::getUpdate().
-         * Aktualizuje název skladby v okně, v trayi a v hintu traye. Pokud se
+         * Aktualizuje název skladby v okně, v trayi a v hintu Traye. Pokud se
          * právě něco přehrává, vyhodí bublinu nad tray ikonou.
          * @param   reply   Ukazatel na objekt s odpovědí ze serveru
          */
-        void updateTrack(QNetworkReply* reply);
+        void updateTrack(Core::Track t);
 
         /**
          * @brief Schová / zobrazí okno
@@ -98,5 +108,7 @@ class HeyTrack: public QWidget {
          */
         void openSettings();
 };
+
+}}
 
 #endif

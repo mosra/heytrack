@@ -12,14 +12,14 @@
 #include <QtGui/QStyle>
 #include <QtGui/QLabel>
 #include <QtGui/QHBoxLayout>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
-#include <QtXmlPatterns/QXmlQuery>
 
-#include <qjson/parser.h>
+#include "Core/AbRadioServer.h"
 
 #include "HeySettings.h"
+
+namespace HeyTrack { namespace Tray {
+
+using namespace Core;
 
 /* Konstruktor */
 HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
@@ -33,13 +33,13 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
     layout->addWidget(nowPlaying, 0, Qt::AlignCenter);
     setLayout(layout);
 
+    /* Initialize server */
+    server = new AbRadioServer(this);
+    connect(server, SIGNAL(track(Core::Track)), SLOT(updateTrack(Core::Track)));
+
     /* Inicializace časovače */
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(getUpdate()));
-
-    /* Incializace sítě */
-    net = new QNetworkAccessManager(this);
-    connect(net, SIGNAL(finished(QNetworkReply*)), this, SLOT(updateTrack(QNetworkReply*)));
 
     /* Tray ikona */
     tray = new QSystemTrayIcon(this);
@@ -94,69 +94,26 @@ bool HeyTrack::saveIcesTune(const QString& artist, const QString& title) {
 
 /* Získání aktuálního songu */
 void HeyTrack::getUpdate() {
-    net->get(QNetworkRequest(QUrl("http://static.abradio.cz/data/ct/36.json")));
+    /** @todo This is UGLY HACK! */
+    server->getTrack(Station(36, "RockRádio Prácheň"));
 }
 
 /* Aktualizace textu aktuální písně */
-void HeyTrack::updateTrack(QNetworkReply* reply) {
-    QJson::Parser parser;
-    QXmlQuery query;
-    QString artist;
-    QString track;
-    bool parsedOk = false;
-
-    /** @todo QMessageBox instead of debug otuput */
-
-    /* Parse server result */
-    QVariantMap result = parser.parse(reply->readAll().data(), &parsedOk).toMap();
-    if (!parsedOk) {
-        qFatal("An error occurred during parsing JSON");
-        exit(1);
-    }
-
-    /* If track wasn't updated, nothing to do */
-    quint32 update = result["lastchange"].toInt();
-    if(lastUpdate == update && update != 0) return;
-    lastUpdate = update;
-
-    /* Root item for getting data*/
-    query.setFocus("<root>" + result["html"].toString().replace("&nbsp;","") + "</root>");
-
-    /* Artist */
-    query.setQuery("root/li[@class='current']/span[@class='artistname']//text()");
-    if (!query.isValid()) {
-        qFatal("An error occurred during parsing artist");
-        exit(1);
-    }
-    query.evaluateTo(&artist);
-    artist = artist.trimmed();
-
-    /* Track name */
-    query.setQuery("root/li[@class='current']/span[@class='trackname']//text()");
-    if (!query.isValid()) {
-        qFatal("An error occurred during parsing track");
-        exit(1);
-    }
-    query.evaluateTo(&track);
-    track = track.trimmed();
-
+void HeyTrack::updateTrack(Track t) {
     /* Update window label */
-    nowPlaying->setText("<strong>" + artist + "</strong> - " + track);
+    nowPlaying->setText("<strong>" + t.artist() + "</strong> - " + t.title());
 
     /* Tray icon message */
-    tray->showMessage(tr("Rockradio: právě se hraje"), artist + " - " +track);
+    tray->showMessage(tr("Rockradio: právě se hraje"), t.artist() + " - " + t.title());
     tray->setIcon(style()->standardIcon(QStyle::SP_MediaPlay).pixmap(16,16));
-    tray->setToolTip("Rockradio: " + artist + " - " + track);
+    tray->setToolTip("Rockradio: " + t.artist() + " - " + t.title());
 
     /* If enabled, save Ices Tune */
     if(settings.value("saveIcesTune", false).toBool())
-        saveIcesTune(tr("Rockradio: ") + artist, track);
+        saveIcesTune(tr("Rockradio: ") + t.artist(), t.title());
 
     /* Next update after 20 seconds */
     timer->start(20*1000);
-
-    /* Cleanup server reply */
-    reply->deleteLater();
 }
 
 /* Přepínání viditelnosti okna */
@@ -172,3 +129,5 @@ void HeyTrack::openSettings() {
     /* Vynucená modálnost (program je pozastaven do doby, než se dialog uzavře) */
     window.exec();
 }
+
+}}

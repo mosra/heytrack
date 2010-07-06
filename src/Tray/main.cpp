@@ -10,7 +10,7 @@ int main(int argc, char** argv)
 
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
 
-    HeyTrack foo;
+    HeyTrack::Tray::HeyTrack foo;
     foo.show();
 
     return app.exec();
