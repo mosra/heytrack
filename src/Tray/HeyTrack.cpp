@@ -26,12 +26,12 @@
 #include <QtGui/QHBoxLayout>
 
 #include "Core/AbRadioServer.h"
-
-#include "HeySettings.h"
+#include "Settings/SettingsDialog.h"
 
 namespace HeyTrack { namespace Tray {
 
 using namespace Core;
+using namespace Settings;
 
 HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
     /* Layout */
@@ -95,8 +95,8 @@ void HeyTrack::toggleVisibility(QSystemTrayIcon::ActivationReason reason) {
 }
 
 void HeyTrack::openSettings() {
-    HeySettings window(&settings);
-    window.exec();
+    SettingsDialog dialog(&settings);
+    dialog.exec();
 }
 
 }}
