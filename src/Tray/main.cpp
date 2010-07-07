@@ -1,5 +1,7 @@
 #include <QtGui/QApplication>
 #include <QtCore/QTextCodec>
+
+#include "configure.h"
 #include "HeyTrack.h"
 
 int main(int argc, char** argv)
