@@ -13,3 +13,5 @@ qt4_wrap_cpp(HeyTrack_Core_MOC
 
 add_library(HeyTrackCore SHARED ${HeyTrack_Core_SRCS} ${HeyTrack_Core_MOC})
 target_link_libraries(HeyTrackCore ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QJSON_LIBRARIES} ${QT_QTXMLPATTERNS_LIBRARY})
+
+install(TARGETS HeyTrackCore DESTINATION lib)
