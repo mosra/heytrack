@@ -42,13 +42,13 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
 
     /* Initialize server */
     server = new AbRadioServer(this);
-    connect(server, SIGNAL(track(Core::Track)), SLOT(updateTrack(Core::Track)));
+    connect(server, SIGNAL(track(Core::Track)), SLOT(track(Core::Track)));
     /** @todo This is UGLY HACK! */
     station = Station(36, "RockRádio Prácheň");
 
     /* Initialize timer and schedule first update one second after start */
     timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(getUpdate()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(getTrack()));
     timer->start(1000);
 
     /* Tray icon */
@@ -74,9 +74,9 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
     setFixedSize(320,50);
 }
 
-void HeyTrack::getUpdate() { server->getTrack(station); }
+void HeyTrack::getTrack() { server->getTrack(station); }
 
-void HeyTrack::updateTrack(Track t) {
+void HeyTrack::track(Track t) {
     /* Update window label */
     nowPlaying->setText("<strong>" + t.artist() + "</strong> - " + t.title());
 

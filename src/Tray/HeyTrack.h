@@ -68,7 +68,7 @@ class HeyTrack: public QWidget {
 
     private slots:
         /** @brief Request track info update */
-        void getUpdate();
+        void getTrack();
 
         /**
          * @brief Update track info
@@ -77,7 +77,7 @@ class HeyTrack: public QWidget {
          * window, in tray hint and shows tray message.
          * @param t         Current track
          */
-        void updateTrack(Core::Track t);
+        void track(Core::Track t);
 
         /**
          * @brief Show / hide window
