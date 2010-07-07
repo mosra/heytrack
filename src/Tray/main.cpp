@@ -16,8 +16,10 @@ int main(int argc, char** argv)
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
     /* Localizations */
-    QTranslator translator;
+    QTranslator translatorQt, translator;
+    translatorQt.load(QT_TRANSLATIONS_DIR + QString("/qt_") + QLocale::system().name());
     translator.load(HEYTRACK_DATA_DIR + QString("/l10n/") + QLocale::system().name());
+    app.installTranslator(&translatorQt);
     app.installTranslator(&translator);
 
     HeyTrack::Tray::HeyTrack foo;
