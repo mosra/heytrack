@@ -79,8 +79,8 @@ class AbstractServer: public QObject {
         virtual void processTrack(QNetworkReply* reply) = 0;
 
     signals:
-        void genres(QList<Genre> list);
-        void stations(QList<Station> list);
+        void genres(QList<Core::Genre> list);
+        void stations(QList<Core::Station> list);
         void track(Core::Track t);
         void error(QString message);
 };
