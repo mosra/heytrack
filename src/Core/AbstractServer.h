@@ -77,9 +77,9 @@ class AbstractServer: public QObject {
         virtual void getTrack(Station station) = 0;
 
     private slots:
-        inline virtual void processGenres(QNetworkReply* reply) {}
-        virtual void processStations(QNetworkReply* reply) {}
-        virtual void processTrack(QNetworkReply* reply) = 0;
+        inline virtual void processGenres() {}
+        virtual void processStations() {}
+        virtual void processTrack() = 0;
 
     signals:
         void genres(QList<Core::Genre> list);

@@ -29,7 +29,7 @@ class AbRadioServer: public AbstractServer {
         unsigned int lastUpdate;
 
     public:
-        AbRadioServer(QObject* parent = 0);
+        inline AbRadioServer(QObject* parent = 0): AbstractServer(parent), lastUpdate(0) {}
 
         inline virtual QString name() const { return QString::fromUtf8("ABRadio.cz"); }
 
@@ -38,7 +38,7 @@ class AbRadioServer: public AbstractServer {
         virtual void getTrack(Station station);
 
     private slots:
-        virtual void processTrack(QNetworkReply* reply);
+        virtual void processTrack();
 };
 
 }}

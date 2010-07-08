@@ -23,10 +23,6 @@
 
 namespace HeyTrack { namespace Core {
 
-AbRadioServer::AbRadioServer(QObject* parent): AbstractServer(parent), lastUpdate(0) {
-    connect(manager, SIGNAL(finished(QNetworkReply*)), SLOT(processTrack(QNetworkReply*)));
-}
-
 void AbRadioServer::getStations(Genre genre) {
     QList<Station> list;
     list << Station(36, "RockRadio Prácheň");
@@ -34,10 +30,14 @@ void AbRadioServer::getStations(Genre genre) {
 }
 
 void AbRadioServer::getTrack(Station station) {
-    manager->get(QNetworkRequest(QUrl(QString("http://static.abradio.cz/data/ct/%0.json").arg(station.id()))));
+    QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(QString("http://static.abradio.cz/data/ct/%0.json").arg(station.id()))));
+    connect(reply, SIGNAL(finished()), SLOT(processTrack()));
 }
 
-void AbRadioServer::processTrack(QNetworkReply* reply) {
+void AbRadioServer::processTrack() {
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+    if(!reply) return;
+
     QJson::Parser parser;
     QXmlQuery query;
     QString artist, title;
