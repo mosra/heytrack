@@ -44,6 +44,8 @@ HeyTrack::HeyTrack(QObject* parent, const QVariantList& args): Applet(parent, ar
     /* Initialize timer */
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(getTrack()));
+
+    resize(320, 50);
 }
 
 void HeyTrack::init() {
