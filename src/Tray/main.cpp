@@ -27,6 +27,9 @@ int main(int argc, char** argv)
     app.setApplicationName("HeyTrack");
     app.setOrganizationName("Mosra");
 
+    /* Don't quit when last window closed */
+    app.setQuitOnLastWindowClosed(false);
+
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 

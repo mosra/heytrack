@@ -50,15 +50,6 @@ class HeyTrack: public QWidget {
         HeyTrack(QWidget* parent = 0);
 
     private:
-        /**
-         * @brief Event of closing window
-         *
-         * Window is not closed, but hidden in tray
-         * @param event     Close event
-         */
-        inline virtual void closeEvent(QCloseEvent* event)
-            { hide(); event->ignore(); }
-
         QTimer* timer;                  /**< @brief Timer for scheduling next update */
         QLabel* nowPlaying;             /**< @brief Now playing label in the window */
         QPushButton* settingsButton;    /**< @brief Button for opening configuration */
