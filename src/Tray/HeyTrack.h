@@ -30,6 +30,7 @@
 class QNetworkAccessManager;
 class QLabel;
 class QTimer;
+class QPushButton;
 class QNetworkReply;
 
 namespace HeyTrack {
@@ -60,6 +61,7 @@ class HeyTrack: public QWidget {
 
         QTimer* timer;                  /**< @brief Timer for scheduling next update */
         QLabel* nowPlaying;             /**< @brief Now playing label in the window */
+        QPushButton* settingsButton;    /**< @brief Button for opening configuration */
         Core::AbstractServer* server;   /**< @brief Stream server */
         Core::Station station;          /**< @brief Currently displayed station */
         QSystemTrayIcon* tray;          /**< @brief Tray icon */
@@ -67,6 +69,14 @@ class HeyTrack: public QWidget {
         QSettings settings;             /**< @brief Settings */
 
     private slots:
+        /**
+         * @brief Initialize
+         *
+         * Tries to get station ID and name from settings, if not present,
+         * displays a button for opening configuration.
+         */
+        void initialize();
+
         /** @brief Request track info update */
         void getTrack();
 

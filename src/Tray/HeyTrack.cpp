@@ -23,6 +23,7 @@
 #include <QtGui/QAction>
 #include <QtGui/QStyle>
 #include <QtGui/QLabel>
+#include <QtGui/QPushButton>
 #include <QtGui/QHBoxLayout>
 
 #include "Core/AbRadioServer.h"
@@ -34,22 +35,23 @@ using namespace Core;
 using namespace Settings;
 
 HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
-    /* Layout */
     nowPlaying = new QLabel(tr("Initialization..."));
+    settingsButton = new QPushButton(tr("Open settings"));
+    connect(settingsButton, SIGNAL(clicked(bool)), SLOT(openSettings()));
+
+    /* Layout */
     QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->addWidget(settingsButton, 0, Qt::AlignCenter);
     layout->addWidget(nowPlaying, 0, Qt::AlignCenter);
     setLayout(layout);
 
     /* Initialize server */
     server = new AbRadioServer(this);
     connect(server, SIGNAL(track(Core::Track)), SLOT(track(Core::Track)));
-    /** @todo This is UGLY HACK! */
-    station = Station(36, "RockRádio Prácheň");
 
-    /* Initialize timer and schedule first update one second after start */
+    /* Initialize timer */
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(getTrack()));
-    timer->start(1000);
 
     /* Tray icon */
     tray = new QSystemTrayIcon(this);
@@ -69,9 +71,35 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
     tray->show();
 
     /* Window icon, title, fixed size */
-    setWindowTitle(tr("%0: now playing").arg(station.name()));
     setWindowIcon(style()->standardIcon(QStyle::SP_MediaPlay).pixmap(16,16));
     setFixedSize(320,50);
+
+    initialize();
+}
+
+void HeyTrack::initialize() {
+    if(settings.contains("station/id") && settings.contains("station/name")) {
+        station = Station(settings.value("station/id").toUInt(), settings.value("station/name").toString());
+
+        settingsButton->setVisible(false);
+        nowPlaying->setVisible(true);
+
+        setWindowTitle(tr("%0: now playing").arg(station.name()));
+
+        /* Request track update */
+        timer->start(1000);
+
+    /* Display button instead of "Initialization..." label */
+    } else {
+        settingsButton->setVisible(true);
+        nowPlaying->setVisible(false);
+
+        setWindowTitle("HeyTrack");
+        tray->setToolTip("HeyTrack");
+
+        /* Stop all track updates */
+        timer->stop();
+    }
 }
 
 void HeyTrack::getTrack() { server->getTrack(station); }
@@ -96,7 +124,7 @@ void HeyTrack::toggleVisibility(QSystemTrayIcon::ActivationReason reason) {
 
 void HeyTrack::openSettings() {
     SettingsDialog dialog(&settings);
-    dialog.exec();
+    if(dialog.exec() == QDialog::Accepted) initialize();
 }
 
 }}

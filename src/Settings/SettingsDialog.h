@@ -21,15 +21,28 @@
 
 #include <QtGui/QDialog>
 
+#include "Core/Genre.h"
+#include "Core/Station.h"
+
+class QComboBox;
 class QCheckBox;
 class QSettings;
 class QLineEdit;
 
-namespace HeyTrack { namespace Settings {
+namespace HeyTrack {
+
+namespace Core {
+    class AbstractServer;
+}
+
+namespace Settings {
 
 /** @brief Settings dialog */
 class SettingsDialog: public QDialog {
     Q_OBJECT
+
+    private:
+        Core::AbstractServer* server;
 
     public:
         /**
@@ -42,8 +55,17 @@ class SettingsDialog: public QDialog {
     private:
         QSettings* settings;        /**< @brief Settings */
 
+        QComboBox *servers,
+            *genres,
+            *stations;
+
     private slots:
         virtual void accept();      /**< @brief Accept dialog */
+
+    private slots:
+        void getStations();
+        void updateGenres(const QList<Core::Genre>& _genres);
+        void updateStations(const QList<Core::Station>& _stations);
 };
 
 }}

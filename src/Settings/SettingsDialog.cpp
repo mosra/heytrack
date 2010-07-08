@@ -17,12 +17,35 @@
 
 #include <QtCore/QSettings>
 #include <QtGui/QDialogButtonBox>
-#include <QtGui/QVBoxLayout>
+#include <QtGui/QGridLayout>
+#include <QtGui/QComboBox>
+#include <QtGui/QLabel>
+
+#include "Core/AbRadioServer.h"
+#include "Core/GenreModel.h"
+#include "Core/StationModel.h"
 
 namespace HeyTrack { namespace Settings {
 
+using namespace Core;
+
 SettingsDialog::SettingsDialog(QSettings* _settings): settings(_settings) {
     setWindowTitle(tr("HeyTrack settings"));
+
+    /* Initialize server */
+    server = new AbRadioServer;
+    connect(server, SIGNAL(genres(QList<Core::Genre>)), SLOT(updateGenres(QList<Core::Genre>)));
+    connect(server, SIGNAL(stations(QList<Core::Station>)), SLOT(updateStations(QList<Core::Station>)));
+
+    /* Initialize comboboxes */
+    servers = new QComboBox;
+    servers->addItem(server->name());
+    genres = new QComboBox;
+    connect(genres, SIGNAL(currentIndexChanged(int)), SLOT(getStations()));
+    stations = new QComboBox;
+
+    /* Get genre list for the default server */
+    server->getGenres();
 
     /* Buttons */
     QDialogButtonBox* buttons =
@@ -30,13 +53,50 @@ SettingsDialog::SettingsDialog(QSettings* _settings): settings(_settings) {
     connect(buttons, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttons, SIGNAL(rejected()), this, SLOT(reject()));
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->addWidget(buttons);
+    QGridLayout* layout = new QGridLayout(this);
+    layout->addWidget(new QLabel(tr("Server:")), 0, 0);
+    layout->addWidget(servers, 0, 1);
+    layout->addWidget(new QLabel(tr("Genre:")), 1, 0);
+    layout->addWidget(genres, 1, 1);
+    layout->addWidget(new QLabel(tr("Station:")), 2, 0);
+    layout->addWidget(stations, 2, 1);
+    layout->addWidget(buttons, 3, 0, 1, 2);
+    layout->setColumnStretch(0, 0);
+    layout->setColumnStretch(1, 1);
     setLayout(layout);
 }
 
 void SettingsDialog::accept() {
+    settings->setValue("genre/id", genres->itemData(genres->currentIndex()));
+
+    settings->setValue("station/id", stations->itemData(stations->currentIndex()));
+    settings->setValue("station/name", stations->currentText());
+
     done(QDialog::Accepted);
+}
+
+void SettingsDialog::getStations() {
+    server->getStations(qobject_cast<GenreModel*>(genres->model())->genre(genres->currentIndex()));
+}
+
+void SettingsDialog::updateGenres(const QList< Genre >& _genres) {
+    GenreModel* m = new GenreModel(_genres, this);
+    genres->clear();
+    genres->setModel(m);
+
+    /* Set genre to user saved */
+    if(settings->contains("genre/id"))
+        genres->setCurrentIndex(genres->findData(settings->value("genre/id", 0)));
+}
+
+void SettingsDialog::updateStations(const QList< Station >& _stations) {
+    StationModel* m = new StationModel(_stations, this);
+    stations->clear();
+    stations->setModel(m);
+
+    /* Set station to user saved */
+    if(settings->contains("station/id"))
+        stations->setCurrentIndex(stations->findData(settings->value("station/id", 0)));
 }
 
 }}
