@@ -19,17 +19,55 @@
  * @brief Class Heytrack::Plasmoid::HeyTrack
  */
 
+#include <QtCore/QTimer>
+#include <QtCore/QSettings>
 #include <Plasma/Applet>
 
-namespace HeyTrack { namespace Plasmoid {
+#include "Core/Station.h"
+#include "Core/Track.h"
+
+namespace HeyTrack {
+
+namespace Core {
+    class AbstractServer;
+}
+
+namespace Plasmoid {
 
 class HeyTrack: public Plasma::Applet {
+    Q_OBJECT
+
+    private:
+        QSettings* settings;
+        QTimer* timer;
+
+        Core::AbstractServer* server;
+        Core::Station station;
+
+        QString text;
+
     public:
         HeyTrack(QObject *parent, const QVariantList &args);
         virtual ~HeyTrack() {}
 
         virtual void init();
         virtual void paintInterface(QPainter* painter, const QStyleOptionGraphicsItem* option, const QRect& contentsRect);
+
+    private slots:
+        /** @brief Request track info update */
+        void getTrack();
+
+        /**
+         * @brief Update track info
+         *
+         * Called automatically after request from server. Updates track in
+         * window, in tray hint and shows tray message.
+         * @param t         Current track
+         */
+        void track(Core::Track t);
+
+        /** @brief Error message */
+        void error(const QString& message);
 };
 
 }}
