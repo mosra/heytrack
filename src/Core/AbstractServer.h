@@ -1,7 +1,7 @@
 #ifndef HeyTrack_Core_AbstractServer_h
 #define HeyTract_Core_AbstractServer_h
 /*
-    Copyright © 2010 Vladimír Vondruš <mosra@centrum.cz>
+    Copyright © 2009, 2010 Vladimír Vondruš <mosra@centrum.cz>
 
     This file is part of HeyTrack.
 
