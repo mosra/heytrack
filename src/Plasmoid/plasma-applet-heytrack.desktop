@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=HeyTrack
+Comment=Displays current track in internet radio stream
+Type=Service
+ServiceTypes=Plasma/Applet
+
+X-KDE-Library=plasma_applet_heytrack
+X-KDE-PluginInfo-Name=heytrack
