@@ -48,6 +48,7 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
     /* Initialize server */
     server = new AbRadioServer(this);
     connect(server, SIGNAL(track(Core::Track)), SLOT(track(Core::Track)));
+    connect(server, SIGNAL(error(QString)), SLOT(error(QString)));
 
     /* Initialize timer */
     timer = new QTimer(this);
@@ -115,6 +116,15 @@ void HeyTrack::track(Track t) {
 
     /* Next update after 20 seconds */
     timer->start(20*1000);
+}
+
+void HeyTrack::error(const QString& message) {
+    tray->setToolTip("");
+    tray->showMessage(tr("Server error"), message);
+    nowPlaying->setText("<strong>Server error:</strong> " + message);
+
+    /* Wait a minute... */
+    timer->start(60*1000);
 }
 
 void HeyTrack::toggleVisibility(QSystemTrayIcon::ActivationReason reason) {

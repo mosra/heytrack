@@ -45,7 +45,10 @@ void AbRadioServer::processTrack(QNetworkReply* reply) {
 
     /* Parse server result */
     QVariantMap result = parser.parse(reply->readAll().data(), &parsedOk).toMap();
-    if(!parsedOk) emit error("An error occurred during parsing JSON");
+    if(!parsedOk) {
+        emit error("Cannot parse JSON");
+        return;
+    }
     reply->deleteLater();
 
     /* If track wasn't updated, nothing to do */
@@ -58,12 +61,18 @@ void AbRadioServer::processTrack(QNetworkReply* reply) {
 
     /* Artist */
     query.setQuery("root/li[@class='current']/span[@class='artistname']//text()");
-    if (!query.isValid()) emit error("An error occurred during parsing artist");
+    if (!query.isValid()) {
+        emit error("Cannot parse artist");
+        return;
+    }
     query.evaluateTo(&artist);
 
     /* Track name */
     query.setQuery("root/li[@class='current']/span[@class='trackname']//text()");
-    if (!query.isValid()) emit error("An error occurred during parsing track");
+    if (!query.isValid()) {
+        emit error("Cannot parse track");
+        return;
+    }
     query.evaluateTo(&title);
 
     Track t(artist.trimmed(), title.trimmed());

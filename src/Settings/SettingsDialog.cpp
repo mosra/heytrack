@@ -20,6 +20,7 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QComboBox>
 #include <QtGui/QLabel>
+#include <QtGui/QMessageBox>
 
 #include "Core/AbRadioServer.h"
 #include "Core/GenreModel.h"
@@ -36,6 +37,7 @@ SettingsDialog::SettingsDialog(QSettings* _settings): settings(_settings) {
     server = new AbRadioServer;
     connect(server, SIGNAL(genres(QList<Core::Genre>)), SLOT(updateGenres(QList<Core::Genre>)));
     connect(server, SIGNAL(stations(QList<Core::Station>)), SLOT(updateStations(QList<Core::Station>)));
+    connect(server, SIGNAL(error(QString)), SLOT(error(QString)));
 
     /* Initialize comboboxes */
     servers = new QComboBox;
@@ -97,6 +99,15 @@ void SettingsDialog::updateStations(const QList< Station >& _stations) {
     /* Set station to user saved */
     if(settings->contains("station/id"))
         stations->setCurrentIndex(stations->findData(settings->value("station/id", 0)));
+}
+
+void SettingsDialog::error(const QString& message) {
+    QMessageBox* b = new QMessageBox(this);
+    b->setWindowTitle(tr("Server error"));
+    b->setText(tr("An error occured during parsing server response:"));
+    b->setInformativeText(message);
+    b->setStandardButtons(QMessageBox::Ok);
+    b->exec();
 }
 
 }}

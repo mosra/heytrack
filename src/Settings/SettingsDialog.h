@@ -66,6 +66,7 @@ class SettingsDialog: public QDialog {
         void getStations();
         void updateGenres(const QList<Core::Genre>& _genres);
         void updateStations(const QList<Core::Station>& _stations);
+        void error(const QString& message);
 };
 
 }}

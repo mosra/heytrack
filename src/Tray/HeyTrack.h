@@ -89,6 +89,9 @@ class HeyTrack: public QWidget {
          */
         void track(Core::Track t);
 
+        /** @brief Error message */
+        void error(const QString& message);
+
         /**
          * @brief Show / hide window
          *
