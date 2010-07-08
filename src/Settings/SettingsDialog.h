@@ -50,7 +50,7 @@ class SettingsDialog: public QDialog {
          *
          * @param _settings   Settings
          */
-        SettingsDialog(QSettings* _settings);
+        SettingsDialog(QSettings* _settings, QWidget* parent = 0);
 
     private:
         QSettings* settings;        /**< @brief Settings */

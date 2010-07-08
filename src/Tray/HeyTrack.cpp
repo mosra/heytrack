@@ -133,7 +133,7 @@ void HeyTrack::toggleVisibility(QSystemTrayIcon::ActivationReason reason) {
 }
 
 void HeyTrack::openSettings() {
-    SettingsDialog dialog(&settings);
+    SettingsDialog dialog(&settings, this);
     if(dialog.exec() == QDialog::Accepted) initialize();
 }
 

@@ -30,7 +30,7 @@ namespace HeyTrack { namespace Settings {
 
 using namespace Core;
 
-SettingsDialog::SettingsDialog(QSettings* _settings): settings(_settings) {
+SettingsDialog::SettingsDialog(QSettings* _settings, QWidget* parent): QDialog(parent), settings(_settings) {
     setWindowTitle(tr("HeyTrack settings"));
 
     /* Initialize server */
