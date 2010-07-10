@@ -17,6 +17,7 @@
 #include <QtCore/QTextCodec>
 #include <QtCore/QLocale>
 #include <QtCore/QTranslator>
+#include <QtCore/QLibraryInfo>
 
 #include "configure.h"
 #include "HeyTrack.h"
@@ -35,8 +36,8 @@ int main(int argc, char** argv)
 
     /* Localizations */
     QTranslator translatorQt, translator;
-    translatorQt.load(QT_TRANSLATIONS_DIR + QString("/qt_") + QLocale::system().name());
-    translator.load(HEYTRACK_DATA_DIR + QString("/l10n/") + QLocale::system().name());
+    translatorQt.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    translator.load("l10n/" + QLocale::system().name(), HEYTRACK_DATA_DIR);
     app.installTranslator(&translatorQt);
     app.installTranslator(&translator);
 
