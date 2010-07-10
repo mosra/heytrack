@@ -35,6 +35,8 @@ using namespace Core;
 using namespace Settings;
 
 HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
+    settings.setIniCodec("UTF-8");
+
     nowPlaying = new QLabel(tr("Initialization..."));
     settingsButton = new QPushButton(tr("Open settings"));
     connect(settingsButton, SIGNAL(clicked(bool)), SLOT(openSettings()));

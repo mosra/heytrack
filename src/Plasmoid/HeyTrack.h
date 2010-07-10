@@ -38,7 +38,7 @@ class HeyTrack: public Plasma::Applet {
     Q_OBJECT
 
     private:
-        QSettings* settings;
+        QSettings settings;
         QTimer* timer;
 
         Core::AbstractServer* server;

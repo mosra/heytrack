@@ -27,12 +27,8 @@ namespace HeyTrack { namespace Plasmoid {
 
 using namespace Core;
 
-HeyTrack::HeyTrack(QObject* parent, const QVariantList& args): Applet(parent, args) {
-    /* Set up QApplication save */
-    qApp->setApplicationName("HeyTrack");
-    qApp->setOrganizationName("Mosra");
-
-    settings = new QSettings();
+HeyTrack::HeyTrack(QObject* parent, const QVariantList& args): Applet(parent, args), settings("Mosra", "HeyTrack") {
+    settings.setIniCodec("UTF-8");
 
     setBackgroundHints(DefaultBackground);
 
@@ -49,10 +45,10 @@ HeyTrack::HeyTrack(QObject* parent, const QVariantList& args): Applet(parent, ar
 }
 
 void HeyTrack::init() {
-    if(!settings->contains("station/id") || !settings->contains("station/name"))
+    if(!settings.contains("station/id") || !settings.contains("station/name"))
         setFailedToLaunch(true, tr("Required settings not available"));
 
-    station = Station(settings->value("station/id").toUInt(), settings->value("station/name").toString());
+    station = Station(settings.value("station/id").toUInt(), settings.value("station/name").toString());
 
     text = tr("Initialization...");
     timer->start(1000);
