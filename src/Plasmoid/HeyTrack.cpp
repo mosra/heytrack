@@ -15,10 +15,13 @@
 
 #include "HeyTrack.h"
 
+#include <QtCore/QTextCodec>
+#include <QtCore/QTranslator>
 #include <QtGui/QApplication>
 #include <QtGui/QPainter>
 #include <Plasma/Theme>
 
+#include "configure.h"
 #include "Core/AbRadioServer.h"
 
 #include "HeyTrack.moc"
@@ -28,6 +31,14 @@ namespace HeyTrack { namespace Plasmoid {
 using namespace Core;
 
 HeyTrack::HeyTrack(QObject* parent, const QVariantList& args): Applet(parent, args), settings("Mosra", "HeyTrack") {
+    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+
+    /* Localizations */
+    QTranslator* translator = new QTranslator(this);
+    translator->load("l10n/" + QLocale::system().name(), HEYTRACK_DATA_DIR);
+    qApp->installTranslator(translator);
+
     settings.setIniCodec("UTF-8");
 
     setBackgroundHints(DefaultBackground);

@@ -1,6 +1,6 @@
 find_package(KDE4 REQUIRED)
 
-include_directories(${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/src)
+include_directories(${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/src ${HeyTrack_BINARY_DIR}/src)
 
 set(HeyTrack_Plasmoid_SRCS
     HeyTrack.cpp
