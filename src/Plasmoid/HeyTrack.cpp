@@ -54,7 +54,7 @@ void HeyTrack::init() {
 
     station = Station(settings->value("station/id").toUInt(), settings->value("station/name").toString());
 
-    text = tr("Initializing...");
+    text = tr("Initialization...");
     timer->start(1000);
 }
 
