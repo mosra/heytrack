@@ -23,6 +23,21 @@
 
 namespace HeyTrack { namespace Core {
 
+void AbRadioServer::getGenres() {
+    QList<Genre> list;
+    list.append(Genre(58,   "Český rozhlas"));
+    list.append(Genre(8,    "Dance"));
+    list.append(Genre(54,   "Folk & Country"));
+    list.append(Genre(1,    "Hip Hop & R'n'B"));
+    list.append(Genre(29,   "Jazz & Blues"));
+    list.append(Genre(57,   "Mluvené slovo"));
+    list.append(Genre(7,    "Pop"));
+    list.append(Genre(2,    "Rock"));
+    list.append(Genre(59,   "Sólo pro..."));
+    list.append(Genre(64,   "World Music"));
+    emit genres(list);
+}
+
 void AbRadioServer::getStations(Genre genre) {
     QList<Station> list;
     list << Station(36, "RockRadio Prácheň");
