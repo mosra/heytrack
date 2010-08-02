@@ -17,6 +17,7 @@
 #include "AbRadioServer.h"
 
 #include <QtCore/QUrl>
+#include <QtCore/QStringList>
 #include <QtNetwork/QNetworkReply>
 #include <QtXmlPatterns/QXmlQuery>
 #include <qjson/parser.h>
@@ -39,8 +40,55 @@ void AbRadioServer::getGenres() {
 }
 
 void AbRadioServer::getStations(Genre genre) {
+    if(genre.id() == 0) {
+        emit stations(QList<Station>());
+        return;
+    }
+
+    QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(QString("http://www.abradio.cz/data/stationlist/%0").arg(genre.id()))));
+    connect(reply, SIGNAL(finished()), SLOT(processStations()));
+}
+
+void AbRadioServer::processStations() {
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+    if(!reply) return;
+
+    QXmlQuery query;
+    query.setFocus("<root>" + QString::fromUtf8(reply->readAll()) + "</root>");
+    reply->deleteLater();
+
+    QStringList ids, names;
+
+    /* Station IDs */
+    query.setQuery("root/option/@value/string()");
+    if(!query.isValid()) {
+        emit error("Cannot parse station list");
+        return;
+    }
+    query.evaluateTo(&ids);
+
+    /* Station names */
+    query.setQuery("root/option/string()");
+    if(!query.isValid()) {
+        emit error("Cannot parse station list");
+        return;
+    }
+    query.evaluateTo(&names);
+
+    /* If station id count is not the same as station name count, error */
+    if(ids.count() != names.count()) {
+        emit error("Cannot parse station list");
+        return;
+    }
+
+    /* Create station list */
     QList<Station> list;
-    list << Station(36, "RockRadio Prácheň");
+    for(int i = 0; i != ids.size(); ++i) {
+        QStringList idnick = ids[i].split('/', QString::SkipEmptyParts);
+
+        list.append(Station(idnick[0].toUInt(), idnick[1], names[i]));
+    }
+
     emit stations(list);
 }
 

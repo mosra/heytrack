@@ -39,6 +39,7 @@ class AbRadioServer: public AbstractServer {
         virtual void getTrack(Station station);
 
     private slots:
+        virtual void processStations();
         virtual void processTrack();
 };
 
