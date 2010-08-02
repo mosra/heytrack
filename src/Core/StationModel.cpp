@@ -22,7 +22,8 @@ QVariant StationModel::data(const QModelIndex& index, int role) const {
         return QVariant();
 
     if(role == Qt::DisplayRole) return stations.at(index.row()).name();
-    if(role == Qt::UserRole) return stations.at(index.row()).id();
+    if(role == Id) return stations.at(index.row()).id();
+    if(role == Nick) return stations.at(index.row()).nick();
 
     return QVariant();
 }

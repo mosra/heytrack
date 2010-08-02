@@ -56,10 +56,12 @@ HeyTrack::HeyTrack(QObject* parent, const QVariantList& args): Applet(parent, ar
 }
 
 void HeyTrack::init() {
-    if(!settings.contains("station/id") || !settings.contains("station/name"))
+    if(!settings.contains("station/id") || !settings.contains("station/nick") || !settings.contains("station/name"))
         setFailedToLaunch(true, tr("Required settings not available"));
 
-    station = Station(settings.value("station/id").toUInt(), settings.value("station/name").toString());
+    station = Station(settings.value("station/id").toUInt(),
+                      settings.value("station/nick").toString(),
+                      settings.value("station/name").toString());
 
     text = tr("Initialization...");
     timer->start(1000);

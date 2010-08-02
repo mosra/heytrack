@@ -27,11 +27,14 @@ namespace HeyTrack { namespace Core {
 class Station {
     private:
         unsigned int _id;
-        QString _name;
+        QString _nick, _name;
 
     public:
         /** @brief Station ID */
         inline unsigned int id() const { return _id; }
+
+        /** @brief Station nick */
+        inline QString nick() const { return _nick; }
 
         /** @brief Station name */
         inline QString name() const { return _name; }
@@ -47,9 +50,11 @@ class Station {
          * @brief Constructor
          *
          * @param __id      Station ID
+         * @param __nick    Station nick
          * @param __name    Station name
          */
-        inline Station(unsigned int __id, const QString& __name): _id(__id), _name(__name) {}
+        inline Station(unsigned int __id, const QString& __nick, const QString& __name):
+            _id(__id), _nick(__nick), _name(__name) {}
 };
 
 }}

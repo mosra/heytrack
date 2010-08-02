@@ -71,7 +71,8 @@ SettingsDialog::SettingsDialog(QSettings* _settings, QWidget* parent): QDialog(p
 void SettingsDialog::accept() {
     settings->setValue("genre/id", genres->itemData(genres->currentIndex()));
 
-    settings->setValue("station/id", stations->itemData(stations->currentIndex()));
+    settings->setValue("station/id", stations->itemData(stations->currentIndex(), StationModel::Id));
+    settings->setValue("station/nick", stations->itemData(stations->currentIndex(), StationModel::Nick));
     settings->setValue("station/name", stations->currentText());
 
     done(QDialog::Accepted);

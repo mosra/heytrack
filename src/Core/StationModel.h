@@ -33,6 +33,11 @@ class StationModel: public QAbstractListModel {
         QList<Station> stations;
 
     public:
+        enum DataRole {
+            Id = 32,
+            Nick = 33
+        };
+
         inline StationModel(const QList<Station>& _stations, QObject* parent = 0): QAbstractListModel(parent), stations(_stations) {}
 
         inline virtual int rowCount(const QModelIndex& parent = QModelIndex()) const
