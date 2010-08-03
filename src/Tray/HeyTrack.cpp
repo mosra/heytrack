@@ -64,6 +64,12 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent), server(0), player(0) {
         style()->standardIcon(QStyle::SP_DriveFDIcon).pixmap(16,16),
         tr("Settings"), this, SLOT(openSettings()));
     menu->addAction(
+        style()->standardIcon(QStyle::SP_MediaPlay),
+        tr("Play stream in player"), this, SLOT(play()));
+    menu->addAction(
+        style()->standardIcon(QStyle::SP_MediaStop),
+        tr("Stop player"), this, SLOT(stop()));
+    menu->addAction(
         style()->standardIcon(QStyle::SP_DialogCloseButton).pixmap(16,16),
         tr("Exit"), qApp, SLOT(quit()));
     tray->setContextMenu(menu);
@@ -145,6 +151,16 @@ void HeyTrack::toggleVisibility(QSystemTrayIcon::ActivationReason reason) {
 void HeyTrack::openSettings() {
     SettingsDialog dialog(&settings, &server, &player, this);
     if(dialog.exec() == QDialog::Accepted) initialize();
+}
+
+void HeyTrack::play() {
+    if(!player || !server) return;
+    player->play(server->streamUrl(station, format));
+}
+
+void HeyTrack::stop() {
+    if(!player) return;
+    player->stop();
 }
 
 }}

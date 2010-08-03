@@ -101,6 +101,12 @@ class HeyTrack: public QWidget {
          * Called after clicking on item of tray icon context menu.
          */
         void openSettings();
+
+        /** @brief Play current stream in player */
+        void play();
+
+        /** @brief Stop player */
+        void stop();
 };
 
 }}
