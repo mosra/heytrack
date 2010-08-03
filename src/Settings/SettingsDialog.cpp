@@ -43,7 +43,6 @@ SettingsDialog::SettingsDialog(QSettings* _settings, QWidget* parent): QDialog(p
     servers = new QComboBox;
     servers->addItem(server->name());
     genres = new QComboBox;
-    connect(genres, SIGNAL(currentIndexChanged(int)), SLOT(getStations()));
     stations = new QComboBox;
 
     /* Get genre list for the default server */
@@ -83,9 +82,13 @@ void SettingsDialog::getStations() {
 }
 
 void SettingsDialog::updateGenres(const QList<Genre>& _genres) {
+    disconnect(genres, SIGNAL(currentIndexChanged(int)), this, SLOT(getStations()));
+
     GenreModel* m = new GenreModel(_genres, this);
     genres->clear();
     genres->setModel(m);
+
+    connect(genres, SIGNAL(currentIndexChanged(int)), SLOT(getStations()));
 
     /* Set genre to user saved */
     if(settings->contains("genre/id"))
