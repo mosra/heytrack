@@ -39,7 +39,7 @@ void AbRadioServer::getGenres() {
     emit genres(list);
 }
 
-void AbRadioServer::getStations(Genre genre) {
+void AbRadioServer::getStations(const Genre& genre) {
     if(genre.id() == 0) {
         emit stations(QList<Station>());
         return;
@@ -92,7 +92,7 @@ void AbRadioServer::processStations() {
     emit stations(list);
 }
 
-void AbRadioServer::getTrack(Station station) {
+void AbRadioServer::getTrack(const Station& station) {
     QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(QString("http://static.abradio.cz/data/ct/%0.json").arg(station.id()))));
     connect(reply, SIGNAL(finished()), SLOT(processTrack()));
 }

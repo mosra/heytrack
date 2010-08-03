@@ -35,8 +35,8 @@ class AbRadioServer: public AbstractServer {
 
     public slots:
         virtual void getGenres();
-        virtual void getStations(Genre genre = Genre());
-        virtual void getTrack(Station station);
+        virtual void getStations(const Genre& genre = Genre());
+        virtual void getTrack(const Station& station);
 
     private slots:
         virtual void processStations();

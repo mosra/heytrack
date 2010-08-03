@@ -64,7 +64,7 @@ class AbstractServer: public QObject {
          * If an invalid genre (with zero ID) was given, the list contains all
          * stations on the server. On error emits AbstractServer::error().
          */
-        virtual void getStations(Genre genre = Genre()) = 0;
+        virtual void getStations(const Genre& genre = Genre()) = 0;
 
         /**
          * @brief Current track
@@ -74,7 +74,7 @@ class AbstractServer: public QObject {
          * didn't change, doesn't emit anything. On error emits
          * AbstractServer::error().
          */
-        virtual void getTrack(Station station) = 0;
+        virtual void getTrack(const Station& station) = 0;
 
     private slots:
         inline virtual void processGenres() {}
