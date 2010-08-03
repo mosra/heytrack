@@ -1,5 +1,5 @@
 /*
-    Copyright © 2009, 2010 Vladimír Vondruš <mosra@centrum.cz>
+    Copyright © 2010 Jan Dupal <dupal.j@seznam.cz>
 
     This file is part of HeyTrack.
 
@@ -13,17 +13,33 @@
     GNU Lesser General Public License version 3 for more details.
 */
 
-#include "AbstractServer.h"
-#include "AbRadioServer.h"
-#include "VlcPlayer.h"
 #include "PhononPlayer.h"
+
+#include <phonon/AudioOutput>
+#include <phonon/MediaObject>
+#include <QUrl>
+
 
 namespace HeyTrack { namespace Core {
 
-inline void registerEverything() {
-    SERVER_REGISTER("ABRadio.cz", AbRadioServer)
-    PLAYER_REGISTER("VLC", VlcPlayer)
-    PLAYER_REGISTER("Phonon", PhononPlayer)
+PhononPlayer::PhononPlayer(QObject* parent): AbstractPlayer(parent)
+{
+    ao = new Phonon::AudioOutput(this);
+    mo = new Phonon::MediaObject(this);
+
+    //Connect audio source with output
+    Phonon::createPath(mo, ao);
+}
+
+void PhononPlayer::play(const QString& url) {
+    QUrl _url(url);
+    mo->setCurrentSource(_url);
+
+    mo->play();
+}
+
+void PhononPlayer::stop() {
+    mo->stop();
 }
 
 }}

@@ -1,13 +1,14 @@
 find_package(Qt4 REQUIRED)
 find_package(QJSON REQUIRED)
 
-include_directories(${QJSON_INCLUDE_DIRS})
+include_directories(${QJSON_INCLUDE_DIRS} ${QT_PHONON_INCLUDE_DIR})
 
 set(HeyTrack_Core_SRCS
     AbstractServer.cpp
     AbRadioServer.cpp
     AbstractPlayer.cpp
     VlcPlayer.cpp
+    PhononPlayer.cpp
     StationModel.cpp
     FormatModel.cpp
     GenreModel.cpp
@@ -29,6 +30,7 @@ target_link_libraries(HeyTrackCore
     ${QT_QTXMLPATTERNS_LIBRARY}
     ${QT_QTDBUS_LIBRARY}
     ${QJSON_LIBRARIES}
+    ${QT_PHONON_LIBRARY}
 )
 
 install(TARGETS HeyTrackCore DESTINATION lib)
