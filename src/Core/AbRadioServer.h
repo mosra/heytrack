@@ -39,6 +39,8 @@ class AbRadioServer: public AbstractServer {
         virtual void getFormats(const Station& station);
         virtual void getTrack(const Station& station);
 
+        virtual QString streamUrl(const Station& station, const Format& format) const;
+
     private slots:
         virtual void processStations();
         virtual void processFormats();

@@ -87,6 +87,12 @@ class AbstractServer: public QObject {
          */
         virtual void getTrack(const Station& station) = 0;
 
+        /**
+         * @brief Stream URL
+         * @return URL for stream of given station
+         */
+        virtual QString streamUrl(const Station& station, const Format& format) const = 0;
+
     private slots:
         inline virtual void processGenres() {}
         virtual void processStations() = 0;

@@ -195,4 +195,9 @@ void AbRadioServer::processTrack() {
     emit track(t);
 }
 
+QString AbRadioServer::streamUrl(const Station& station, const Format& format) const {
+    return QString("http://static.abradio.cz/data/s/%0/playlist/%1%2.asx")
+        .arg(station.id()).arg(station.nick()).arg(format.nick());
+}
+
 }}
