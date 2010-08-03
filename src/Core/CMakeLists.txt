@@ -6,6 +6,8 @@ include_directories(${QJSON_INCLUDE_DIRS})
 set(HeyTrack_Core_SRCS
     AbstractServer.cpp
     AbRadioServer.cpp
+    AbstractPlayer.cpp
+    VlcPlayer.cpp
     StationModel.cpp
     FormatModel.cpp
     GenreModel.cpp
@@ -13,6 +15,7 @@ set(HeyTrack_Core_SRCS
 
 qt4_wrap_cpp(HeyTrack_Core_MOC
     AbstractServer.h
+    AbstractPlayer.h
     StationModel.h
     FormatModel.h
     GenreModel.h

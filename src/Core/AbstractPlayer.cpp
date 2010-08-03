@@ -13,15 +13,24 @@
     GNU Lesser General Public License version 3 for more details.
 */
 
-#include "AbstractServer.h"
-#include "AbRadioServer.h"
-#include "VlcPlayer.h"
+#include "AbstractPlayer.h"
 
 namespace HeyTrack { namespace Core {
 
-inline void registerEverything() {
-    SERVER_REGISTER("ABRadio.cz", AbRadioServer)
-    PLAYER_REGISTER("VLC", VlcPlayer)
+QHash<QString, AbstractPlayer* (*)(QObject*)> AbstractPlayer::_players;
+
+void AbstractPlayer::registerPlayer(const QString& name, AbstractPlayer* (*instancer)(QObject*)) {
+    _players.insert(name, instancer);
+}
+
+QList<QString> AbstractPlayer::players() {
+    return _players.keys();
+}
+
+AbstractPlayer* AbstractPlayer::instance(const QString& name, QObject* parent) {
+    if(!_players.contains(name)) return 0;
+
+    return _players[name](parent);
 }
 
 }}

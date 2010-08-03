@@ -1,3 +1,5 @@
+#ifndef HeyTrack_Core_VlcPlayer_h
+#define HeyTrack_Core_VlcPlayer_h
 /*
     Copyright © 2009, 2010 Vladimír Vondruš <mosra@centrum.cz>
 
@@ -13,15 +15,23 @@
     GNU Lesser General Public License version 3 for more details.
 */
 
-#include "AbstractServer.h"
-#include "AbRadioServer.h"
-#include "VlcPlayer.h"
+/** @file
+ * @brief Class HeyTrack::Core::VlcPlayer
+ */
+
+#include "AbstractPlayer.h"
 
 namespace HeyTrack { namespace Core {
 
-inline void registerEverything() {
-    SERVER_REGISTER("ABRadio.cz", AbRadioServer)
-    PLAYER_REGISTER("VLC", VlcPlayer)
-}
+class VlcPlayer: public AbstractPlayer {
+    PLAYER_DEFINE(VlcPlayer)
+
+    public:
+        VlcPlayer(QObject* parent = 0): AbstractPlayer(parent) {}
+        virtual void play(const QString& url);
+        virtual void stop();
+};
 
 }}
+
+#endif

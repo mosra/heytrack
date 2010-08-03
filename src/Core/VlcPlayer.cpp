@@ -13,15 +13,16 @@
     GNU Lesser General Public License version 3 for more details.
 */
 
-#include "AbstractServer.h"
-#include "AbRadioServer.h"
 #include "VlcPlayer.h"
 
 namespace HeyTrack { namespace Core {
 
-inline void registerEverything() {
-    SERVER_REGISTER("ABRadio.cz", AbRadioServer)
-    PLAYER_REGISTER("VLC", VlcPlayer)
+void VlcPlayer::play(const QString& url) {
+
+}
+
+void VlcPlayer::stop() {
+
 }
 
 }}
