@@ -24,8 +24,8 @@
 #include <QtGui/QSystemTrayIcon>
 #include <QtGui/QCloseEvent>
 
-#include <Core/Track.h>
-#include <Core/Station.h>
+#include "Core/Track.h"
+#include "Core/Station.h"
 
 class QNetworkAccessManager;
 class QLabel;

@@ -22,8 +22,7 @@
 #include "configure.h"
 #include "HeyTrack.h"
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
     QApplication app(argc, argv);
     app.setApplicationName("HeyTrack");
     app.setOrganizationName("Mosra");

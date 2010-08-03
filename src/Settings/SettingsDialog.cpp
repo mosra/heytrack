@@ -82,7 +82,7 @@ void SettingsDialog::getStations() {
     server->getStations(qobject_cast<GenreModel*>(genres->model())->genre(genres->currentIndex()));
 }
 
-void SettingsDialog::updateGenres(const QList< Genre >& _genres) {
+void SettingsDialog::updateGenres(const QList<Genre>& _genres) {
     GenreModel* m = new GenreModel(_genres, this);
     genres->clear();
     genres->setModel(m);
@@ -92,7 +92,7 @@ void SettingsDialog::updateGenres(const QList< Genre >& _genres) {
         genres->setCurrentIndex(genres->findData(settings->value("genre/id", 0)));
 }
 
-void SettingsDialog::updateStations(const QList< Station >& _stations) {
+void SettingsDialog::updateStations(const QList<Station>& _stations) {
     StationModel* m = new StationModel(_stations, this);
     stations->clear();
     stations->setModel(m);
