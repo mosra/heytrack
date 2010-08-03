@@ -25,6 +25,8 @@ namespace HeyTrack { namespace Core {
  * @todo Station list, genre list
  */
 class AbRadioServer: public AbstractServer {
+    SERVER_DEFINE(AbRadioServer)
+
     private:
         unsigned int lastUpdate;
 

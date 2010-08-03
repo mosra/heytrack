@@ -4,6 +4,7 @@ find_package(QJSON REQUIRED)
 include_directories(${QJSON_INCLUDE_DIRS})
 
 set(HeyTrack_Core_SRCS
+    AbstractServer.cpp
     AbRadioServer.cpp
     StationModel.cpp
     FormatModel.cpp

@@ -20,6 +20,7 @@
  */
 
 #include <QtCore/QObject>
+#include <QtCore/QHash>
 #include <QtNetwork/QNetworkAccessManager>
 
 #include "Genre.h"
@@ -40,6 +41,10 @@ class AbstractServer: public QObject {
         QNetworkAccessManager* manager;
 
     public:
+        static void registerServer(const QString& name, AbstractServer* (*instancer)(QObject*));
+        static QList<QString> servers();
+        static AbstractServer* instance(const QString& name, QObject* parent = 0);
+
         /**
          * @brief Constructor
          *
@@ -97,8 +102,18 @@ class AbstractServer: public QObject {
         void formats(QList<Core::Format> list);
         void track(Core::Track t);
         void error(QString message);
+
+    private:
+        static QHash<QString, AbstractServer* (*)(QObject*)> _servers;
 };
 
 }}
+
+#define SERVER_DEFINE(class) public: \
+    static inline AbstractServer* instancer(QObject* parent = 0) \
+        { return new class(parent); } \
+    private:
+
+#define SERVER_REGISTER(name, class) AbstractServer::registerServer(name, class::instancer);
 
 #endif

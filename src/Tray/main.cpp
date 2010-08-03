@@ -19,10 +19,13 @@
 #include <QtCore/QTranslator>
 #include <QtCore/QLibraryInfo>
 
+#include "Core/registerEverything.h"
 #include "configure.h"
 #include "HeyTrack.h"
 
 int main(int argc, char** argv) {
+    HeyTrack::Core::registerEverything();
+
     QApplication app(argc, argv);
     app.setApplicationName("HeyTrack");
     app.setOrganizationName("Mosra");
