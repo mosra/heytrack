@@ -70,6 +70,8 @@ SettingsDialog::SettingsDialog(QSettings* _settings, QWidget* parent): QDialog(p
     layout->setColumnStretch(0, 0);
     layout->setColumnStretch(1, 1);
     setLayout(layout);
+
+    setMinimumWidth(320);
 }
 
 void SettingsDialog::accept() {
