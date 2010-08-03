@@ -78,7 +78,7 @@ class AbstractServer: public QObject {
 
     private slots:
         inline virtual void processGenres() {}
-        virtual void processStations() {}
+        virtual void processStations() = 0;
         virtual void processTrack() = 0;
 
     signals:
