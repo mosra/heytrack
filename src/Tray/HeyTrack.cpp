@@ -81,10 +81,14 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
 }
 
 void HeyTrack::initialize() {
-    if(settings.contains("station/id") && settings.contains("station/nick") && settings.contains("station/name")) {
+    if(settings.contains("station/id") && settings.contains("station/nick") && settings.contains("station/name") && settings.contains("format/id") && settings.contains("format/nick") && settings.contains("format/name")) {
         station = Station(settings.value("station/id").toUInt(),
                           settings.value("station/nick").toString(),
                           settings.value("station/name").toString());
+
+        format = Format(settings.value("format/id").toUInt(),
+                        settings.value("format/nick").toString(),
+                        settings.value("format/name").toString());
 
         settingsButton->setVisible(false);
         nowPlaying->setVisible(true);

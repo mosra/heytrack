@@ -23,6 +23,7 @@
 
 #include "Core/Genre.h"
 #include "Core/Station.h"
+#include "Core/Format.h"
 
 class QComboBox;
 class QCheckBox;
@@ -57,15 +58,18 @@ class SettingsDialog: public QDialog {
 
         QComboBox *servers,
             *genres,
-            *stations;
+            *stations,
+            *formats;
 
     private slots:
         virtual void accept();      /**< @brief Accept dialog */
 
     private slots:
         void getStations();
+        void getFormats();
         void updateGenres(const QList<Core::Genre>& _genres);
         void updateStations(const QList<Core::Station>& _stations);
+        void updateFormats(const QList<Core::Format>& _formats);
         void error(const QString& message);
 };
 

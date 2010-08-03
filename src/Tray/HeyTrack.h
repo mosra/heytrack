@@ -26,6 +26,7 @@
 
 #include "Core/Track.h"
 #include "Core/Station.h"
+#include "Core/Format.h"
 
 class QNetworkAccessManager;
 class QLabel;
@@ -55,6 +56,7 @@ class HeyTrack: public QWidget {
         QPushButton* settingsButton;    /**< @brief Button for opening configuration */
         Core::AbstractServer* server;   /**< @brief Stream server */
         Core::Station station;          /**< @brief Currently displayed station */
+        Core::Format format;            /**< @brief Stream format for current station */
         QSystemTrayIcon* tray;          /**< @brief Tray icon */
 
         QSettings settings;             /**< @brief Settings */
