@@ -16,6 +16,7 @@
 #include "SettingsDialog.h"
 
 #include <QtCore/QSettings>
+#include <QtGui/QApplication>
 #include <QtGui/QDialogButtonBox>
 #include <QtGui/QGridLayout>
 #include <QtGui/QComboBox>
@@ -31,25 +32,25 @@ namespace HeyTrack { namespace Settings {
 
 using namespace Core;
 
-SettingsDialog::SettingsDialog(QSettings* _settings, QWidget* parent): QDialog(parent), settings(_settings) {
+SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, QWidget* parent): QDialog(parent), settings(_settings), server(_server) {
     setWindowTitle(tr("HeyTrack settings"));
-
-    /* Initialize server */
-    server = new AbRadioServer;
-    connect(server, SIGNAL(genres(QList<Core::Genre>)), SLOT(updateGenres(QList<Core::Genre>)));
-    connect(server, SIGNAL(stations(QList<Core::Station>)), SLOT(updateStations(QList<Core::Station>)));
-    connect(server, SIGNAL(formats(QList<Core::Format>)), SLOT(updateFormats(QList<Core::Format>)));
-    connect(server, SIGNAL(error(QString)), SLOT(error(QString)));
 
     /* Initialize comboboxes */
     servers = new QComboBox;
-    servers->addItem(server->name());
+    servers->addItems(AbstractServer::servers());
     genres = new QComboBox;
     stations = new QComboBox;
     formats = new QComboBox;
 
+    /* Initialize server */
+    if(settings->contains("server"))
+        servers->setCurrentIndex(servers->findText(settings->value("server").toString()));
+    setServer(settings->value("server", servers->itemText(0)).toString());
+
+    connect(servers, SIGNAL(currentIndexChanged(QString)), SLOT(setServer(QString)));
+
     /* Get genre list for the default server */
-    server->getGenres();
+    (*server)->getGenres();
 
     /* Buttons */
     QDialogButtonBox* buttons =
@@ -75,6 +76,8 @@ SettingsDialog::SettingsDialog(QSettings* _settings, QWidget* parent): QDialog(p
 }
 
 void SettingsDialog::accept() {
+    settings->setValue("server", servers->currentText());
+
     settings->setValue("genre/id", genres->itemData(genres->currentIndex()));
 
     settings->setValue("station/id", stations->itemData(stations->currentIndex(), StationModel::Id));
@@ -88,12 +91,22 @@ void SettingsDialog::accept() {
     done(QDialog::Accepted);
 }
 
+void SettingsDialog::setServer(const QString& name) {
+    if(*server) delete *server;
+    (*server) = AbstractServer::instance(name, qApp);
+
+    connect(*server, SIGNAL(genres(QList<Core::Genre>)), SLOT(updateGenres(QList<Core::Genre>)));
+    connect(*server, SIGNAL(stations(QList<Core::Station>)), SLOT(updateStations(QList<Core::Station>)));
+    connect(*server, SIGNAL(formats(QList<Core::Format>)), SLOT(updateFormats(QList<Core::Format>)));
+    connect(*server, SIGNAL(error(QString)), SLOT(error(QString)));
+}
+
 void SettingsDialog::getStations() {
-    server->getStations(qobject_cast<GenreModel*>(genres->model())->genre(genres->currentIndex()));
+    (*server)->getStations(qobject_cast<GenreModel*>(genres->model())->genre(genres->currentIndex()));
 }
 
 void SettingsDialog::getFormats() {
-    server->getFormats(qobject_cast<StationModel*>(stations->model())->station(stations->currentIndex()));
+    (*server)->getFormats(qobject_cast<StationModel*>(stations->model())->station(stations->currentIndex()));
 }
 
 void SettingsDialog::updateGenres(const QList<Genre>& _genres) {

@@ -43,7 +43,7 @@ class SettingsDialog: public QDialog {
     Q_OBJECT
 
     private:
-        Core::AbstractServer* server;
+        Core::AbstractServer** server;
 
     public:
         /**
@@ -51,7 +51,7 @@ class SettingsDialog: public QDialog {
          *
          * @param _settings   Settings
          */
-        SettingsDialog(QSettings* _settings, QWidget* parent = 0);
+        SettingsDialog(QSettings* _settings, Core::AbstractServer** _server, QWidget* parent = 0);
 
     private:
         QSettings* settings;        /**< @brief Settings */
@@ -65,6 +65,7 @@ class SettingsDialog: public QDialog {
         virtual void accept();      /**< @brief Accept dialog */
 
     private slots:
+        void setServer(const QString& name);
         void getStations();
         void getFormats();
         void updateGenres(const QList<Core::Genre>& _genres);

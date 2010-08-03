@@ -26,7 +26,7 @@
 #include <QtGui/QPushButton>
 #include <QtGui/QHBoxLayout>
 
-#include "Core/AbRadioServer.h"
+#include "Core/AbstractServer.h"
 #include "Settings/SettingsDialog.h"
 
 namespace HeyTrack { namespace Tray {
@@ -34,7 +34,7 @@ namespace HeyTrack { namespace Tray {
 using namespace Core;
 using namespace Settings;
 
-HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
+HeyTrack::HeyTrack(QWidget* parent): QWidget(parent), server(0) {
     settings.setIniCodec("UTF-8");
 
     nowPlaying = new QLabel(tr("Initialization..."));
@@ -46,11 +46,6 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
     layout->addWidget(settingsButton, 0, Qt::AlignCenter);
     layout->addWidget(nowPlaying, 0, Qt::AlignCenter);
     setLayout(layout);
-
-    /* Initialize server */
-    server = new AbRadioServer(this);
-    connect(server, SIGNAL(track(Core::Track)), SLOT(track(Core::Track)));
-    connect(server, SIGNAL(error(QString)), SLOT(error(QString)));
 
     /* Initialize timer */
     timer = new QTimer(this);
@@ -81,7 +76,11 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent) {
 }
 
 void HeyTrack::initialize() {
-    if(settings.contains("station/id") && settings.contains("station/nick") && settings.contains("station/name") && settings.contains("format/id") && settings.contains("format/nick") && settings.contains("format/name")) {
+    if(settings.contains("server") && settings.contains("station/id") && settings.contains("station/nick") && settings.contains("station/name") && settings.contains("format/id") && settings.contains("format/nick") && settings.contains("format/name")) {
+        server = AbstractServer::instance(settings.value("server").toString(), qApp);
+        connect(server, SIGNAL(track(Core::Track)), SLOT(track(Core::Track)));
+        connect(server, SIGNAL(error(QString)), SLOT(error(QString)));
+
         station = Station(settings.value("station/id").toUInt(),
                           settings.value("station/nick").toString(),
                           settings.value("station/name").toString());
@@ -141,7 +140,7 @@ void HeyTrack::toggleVisibility(QSystemTrayIcon::ActivationReason reason) {
 }
 
 void HeyTrack::openSettings() {
-    SettingsDialog dialog(&settings, this);
+    SettingsDialog dialog(&settings, &server, this);
     if(dialog.exec() == QDialog::Accepted) initialize();
 }
 
