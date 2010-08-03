@@ -33,8 +33,6 @@ class AbRadioServer: public AbstractServer {
     public:
         inline AbRadioServer(QObject* parent = 0): AbstractServer(parent), lastUpdate(0) {}
 
-        inline virtual QString name() const { return QString::fromUtf8("ABRadio.cz"); }
-
     public slots:
         virtual void getGenres();
         virtual void getStations(const Genre& genre = Genre());

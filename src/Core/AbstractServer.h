@@ -52,9 +52,6 @@ class AbstractServer: public QObject {
          */
         inline AbstractServer(QObject* parent = 0): QObject(parent), manager(new QNetworkAccessManager(this)) {}
 
-        /** @brief Server name */
-        virtual QString name() const = 0;
-
     public slots:
         /**
          * @brief Available genres on server
