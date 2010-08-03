@@ -99,7 +99,7 @@ void SettingsDialog::updateStations(const QList<Station>& _stations) {
 
     /* Set station to user saved */
     if(settings->contains("station/id"))
-        stations->setCurrentIndex(stations->findData(settings->value("station/id", 0)));
+        stations->setCurrentIndex(stations->findData(settings->value("station/id", 0), StationModel::Id));
 }
 
 void SettingsDialog::error(const QString& message) {
