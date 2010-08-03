@@ -6,12 +6,14 @@ include_directories(${QJSON_INCLUDE_DIRS})
 set(HeyTrack_Core_SRCS
     AbRadioServer.cpp
     StationModel.cpp
+    FormatModel.cpp
     GenreModel.cpp
 )
 
 qt4_wrap_cpp(HeyTrack_Core_MOC
     AbstractServer.h
     StationModel.h
+    FormatModel.h
     GenreModel.h
 )
 

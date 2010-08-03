@@ -24,6 +24,7 @@
 
 #include "Genre.h"
 #include "Station.h"
+#include "Format.h"
 #include "Track.h"
 
 class QNetworkReply;
@@ -67,6 +68,14 @@ class AbstractServer: public QObject {
         virtual void getStations(const Genre& genre = Genre()) = 0;
 
         /**
+         * @brief Available formats for given station
+         *
+         * Emits AbstractServer::formats() with list of formats. On error emits
+         * AbstractServer::error().
+         */
+        virtual void getFormats(const Station& station) = 0;
+
+        /**
          * @brief Current track
          *
          * If the track changed since last request, emits
@@ -79,11 +88,13 @@ class AbstractServer: public QObject {
     private slots:
         inline virtual void processGenres() {}
         virtual void processStations() = 0;
+        virtual void processFormats() = 0;
         virtual void processTrack() = 0;
 
     signals:
         void genres(QList<Core::Genre> list);
         void stations(QList<Core::Station> list);
+        void formats(QList<Core::Format> list);
         void track(Core::Track t);
         void error(QString message);
 };

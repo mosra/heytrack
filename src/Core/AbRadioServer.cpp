@@ -92,6 +92,59 @@ void AbRadioServer::processStations() {
     emit stations(list);
 }
 
+void AbRadioServer::getFormats(const Station& station) {
+    QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(QString("http://static.abradio.cz/player/%0/").arg(station.id()))));
+    connect(reply, SIGNAL(finished()), SLOT(processFormats()));
+}
+
+void AbRadioServer::processFormats() {
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+    if(!reply) return;
+
+    QXmlQuery query;
+    /** @todo Fix for HTML entities */
+    query.setFocus(QString::fromUtf8(reply->readAll()).replace('&', ""));
+
+    QStringList ids, names;
+
+    query.setQuery("*:html/*:body/*:div[@id='w']/*:div[@id='c']/*:div[@id='l']/*:div[@id='player']/*:div[@id='qswitch']/*:select/*:option/@value/string()");
+    if(!query.isValid()) {
+        emit error("Cannot parse format list");
+        return;
+    }
+    query.evaluateTo(&ids);
+
+    query.setQuery("*:html/*:body/*:div[@id='w']/*:div[@id='c']/*:div[@id='l']/*:div[@id='player']/*:div[@id='qswitch']/*:select/*:option/string()");
+    if(!query.isValid()) {
+        emit error("Cannot parse format list");
+        return;
+    }
+    query.evaluateTo(&names);
+
+    /* If format ID count is not the same as format name count, error */
+    if(ids.count() != names.count()) {
+        emit error("Cannot parse format list");
+        return;
+    }
+
+    /* Regexp for separating bitrate from name */
+    QRegExp rx("(\\d+)(?=kbps)");
+
+    /* Create format list */
+    QList<Format> list;
+    for(int i = 0; i != ids.count(); ++i) {
+        int pos = rx.indexIn(names[i]);
+        if(pos == -1) {
+            emit error("Cannot parse format list");
+            return;
+        }
+
+        list.append(Format(ids[i].toUInt(), rx.cap(1), names[i]));
+    }
+
+    emit formats(list);
+}
+
 void AbRadioServer::getTrack(const Station& station) {
     QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(QString("http://static.abradio.cz/data/ct/%0.json").arg(station.id()))));
     connect(reply, SIGNAL(finished()), SLOT(processTrack()));
