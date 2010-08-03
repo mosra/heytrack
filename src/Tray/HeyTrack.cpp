@@ -27,6 +27,7 @@
 #include <QtGui/QHBoxLayout>
 
 #include "Core/AbstractServer.h"
+#include "Core/AbstractPlayer.h"
 #include "Settings/SettingsDialog.h"
 
 namespace HeyTrack { namespace Tray {
@@ -34,7 +35,7 @@ namespace HeyTrack { namespace Tray {
 using namespace Core;
 using namespace Settings;
 
-HeyTrack::HeyTrack(QWidget* parent): QWidget(parent), server(0) {
+HeyTrack::HeyTrack(QWidget* parent): QWidget(parent), server(0), player(0) {
     settings.setIniCodec("UTF-8");
 
     nowPlaying = new QLabel(tr("Initialization..."));
@@ -80,6 +81,8 @@ void HeyTrack::initialize() {
         server = AbstractServer::instance(settings.value("server").toString(), qApp);
         connect(server, SIGNAL(track(Core::Track)), SLOT(track(Core::Track)));
         connect(server, SIGNAL(error(QString)), SLOT(error(QString)));
+
+        player = AbstractPlayer::instance(settings.value("player").toString(), qApp);
 
         station = Station(settings.value("station/id").toUInt(),
                           settings.value("station/nick").toString(),
@@ -140,7 +143,7 @@ void HeyTrack::toggleVisibility(QSystemTrayIcon::ActivationReason reason) {
 }
 
 void HeyTrack::openSettings() {
-    SettingsDialog dialog(&settings, &server, this);
+    SettingsDialog dialog(&settings, &server, &player, this);
     if(dialog.exec() == QDialog::Accepted) initialize();
 }
 

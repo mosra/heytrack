@@ -38,6 +38,7 @@ namespace HeyTrack {
 
 namespace Core {
     class AbstractServer;
+    class AbstractPlayer;
 }
 
 namespace Tray {
@@ -55,6 +56,7 @@ class HeyTrack: public QWidget {
         QLabel* nowPlaying;             /**< @brief Now playing label in the window */
         QPushButton* settingsButton;    /**< @brief Button for opening configuration */
         Core::AbstractServer* server;   /**< @brief Stream server */
+        Core::AbstractPlayer* player;   /**< @brief Stream player */
         Core::Station station;          /**< @brief Currently displayed station */
         Core::Format format;            /**< @brief Stream format for current station */
         QSystemTrayIcon* tray;          /**< @brief Tray icon */

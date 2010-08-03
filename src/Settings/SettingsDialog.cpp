@@ -27,17 +27,20 @@
 #include "Core/GenreModel.h"
 #include "Core/StationModel.h"
 #include "Core/FormatModel.h"
+#include "Core/AbstractPlayer.h"
 
 namespace HeyTrack { namespace Settings {
 
 using namespace Core;
 
-SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, QWidget* parent): QDialog(parent), settings(_settings), server(_server) {
+SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, AbstractPlayer** _player, QWidget* parent): QDialog(parent), settings(_settings), server(_server), player(_player) {
     setWindowTitle(tr("HeyTrack settings"));
 
     /* Initialize comboboxes */
     servers = new QComboBox;
     servers->addItems(AbstractServer::servers());
+    players = new QComboBox;
+    players->addItems(AbstractPlayer::players());
     genres = new QComboBox;
     stations = new QComboBox;
     formats = new QComboBox;
@@ -52,6 +55,11 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, Q
     /* Get genre list for the default server */
     (*server)->getGenres();
 
+    /* Initialize player */
+    if(settings->contains("player"))
+        players->setCurrentIndex(players->findText(settings->value("player").toString()));
+    setPlayer(settings->value("player", players->itemText(0)).toString());
+
     /* Buttons */
     QDialogButtonBox* buttons =
         new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -61,13 +69,15 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, Q
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(new QLabel(tr("Server:")), 0, 0);
     layout->addWidget(servers, 0, 1);
-    layout->addWidget(new QLabel(tr("Genre:")), 1, 0);
-    layout->addWidget(genres, 1, 1);
-    layout->addWidget(new QLabel(tr("Station:")), 2, 0);
-    layout->addWidget(stations, 2, 1);
-    layout->addWidget(new QLabel(tr("Stream format:")), 3, 0);
-    layout->addWidget(formats, 3, 1);
-    layout->addWidget(buttons, 4, 0, 1, 2);
+    layout->addWidget(new QLabel(tr("Player:")), 1, 0);
+    layout->addWidget(players, 1, 1);
+    layout->addWidget(new QLabel(tr("Genre:")), 2, 0);
+    layout->addWidget(genres, 2, 1);
+    layout->addWidget(new QLabel(tr("Station:")), 3, 0);
+    layout->addWidget(stations, 3, 1);
+    layout->addWidget(new QLabel(tr("Stream format:")), 4, 0);
+    layout->addWidget(formats, 4, 1);
+    layout->addWidget(buttons, 5, 0, 1, 2);
     layout->setColumnStretch(0, 0);
     layout->setColumnStretch(1, 1);
     setLayout(layout);
@@ -77,6 +87,7 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, Q
 
 void SettingsDialog::accept() {
     settings->setValue("server", servers->currentText());
+    settings->setValue("player", players->currentText());
 
     settings->setValue("genre/id", genres->itemData(genres->currentIndex()));
 
@@ -99,6 +110,11 @@ void SettingsDialog::setServer(const QString& name) {
     connect(*server, SIGNAL(stations(QList<Core::Station>)), SLOT(updateStations(QList<Core::Station>)));
     connect(*server, SIGNAL(formats(QList<Core::Format>)), SLOT(updateFormats(QList<Core::Format>)));
     connect(*server, SIGNAL(error(QString)), SLOT(error(QString)));
+}
+
+void SettingsDialog::setPlayer(const QString& name) {
+    if(*player) delete *player;
+    (*player) = AbstractPlayer::instance(name, qApp);
 }
 
 void SettingsDialog::getStations() {

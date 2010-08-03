@@ -34,6 +34,7 @@ namespace HeyTrack {
 
 namespace Core {
     class AbstractServer;
+    class AbstractPlayer;
 }
 
 namespace Settings {
@@ -44,6 +45,7 @@ class SettingsDialog: public QDialog {
 
     private:
         Core::AbstractServer** server;
+        Core::AbstractPlayer** player;
 
     public:
         /**
@@ -51,12 +53,13 @@ class SettingsDialog: public QDialog {
          *
          * @param _settings   Settings
          */
-        SettingsDialog(QSettings* _settings, Core::AbstractServer** _server, QWidget* parent = 0);
+        SettingsDialog(QSettings* _settings, Core::AbstractServer** _server, Core::AbstractPlayer** _player, QWidget* parent = 0);
 
     private:
         QSettings* settings;        /**< @brief Settings */
 
         QComboBox *servers,
+            *players,
             *genres,
             *stations,
             *formats;
@@ -66,6 +69,7 @@ class SettingsDialog: public QDialog {
 
     private slots:
         void setServer(const QString& name);
+        void setPlayer(const QString& name);
         void getStations();
         void getFormats();
         void updateGenres(const QList<Core::Genre>& _genres);
