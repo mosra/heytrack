@@ -22,7 +22,7 @@ namespace HeyTrack { namespace Core {
 /**
  * @brief ABRadio.cz server
  *
- * @todo Station list, genre list
+ * @todo Český rozhlas
  */
 class AbRadioServer: public AbstractServer {
     Q_OBJECT
