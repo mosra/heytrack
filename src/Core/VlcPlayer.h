@@ -21,15 +21,21 @@
 
 #include "AbstractPlayer.h"
 
+class QDBusInterface;
+
 namespace HeyTrack { namespace Core {
 
 class VlcPlayer: public AbstractPlayer {
     PLAYER_DEFINE(VlcPlayer)
 
     public:
-        VlcPlayer(QObject* parent = 0): AbstractPlayer(parent) {}
+        VlcPlayer(QObject* parent = 0);
         virtual void play(const QString& url);
         virtual void stop();
+
+    private:
+        QDBusInterface *playerInterface,
+            *tracklistInterface;
 };
 
 }}

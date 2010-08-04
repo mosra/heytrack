@@ -15,14 +15,22 @@
 
 #include "VlcPlayer.h"
 
+#include <QtDBus/QDBusInterface>
+
 namespace HeyTrack { namespace Core {
 
-void VlcPlayer::play(const QString& url) {
+VlcPlayer::VlcPlayer(QObject* parent): AbstractPlayer(parent) {
+    playerInterface = new QDBusInterface("org.mpris.vlc", "/Player", "", QDBusConnection::sessionBus(), this);
+    tracklistInterface = new QDBusInterface("org.mpris.vlc", "/TrackList", "", QDBusConnection::sessionBus(), this);
+}
 
+void VlcPlayer::play(const QString& url) {
+    /* Add track and start playing immediately */
+    tracklistInterface->call("AddTrack", url, true);
 }
 
 void VlcPlayer::stop() {
-
+    playerInterface->call("Stop");
 }
 
 }}
