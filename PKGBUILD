@@ -2,9 +2,9 @@
 pkgname=heytrack
 pkgver=dev
 pkgrel=1
-pkgdesc="Displays current track in internet radio stream"
+pkgdesc="Displays current track and plays internet radio streams"
 arch=('i686' 'x86_64')
-url="http://archerfx.cz/blog/"
+url="http://github.com/mosra/heytrack.git"
 license=('LGPLv3')
 groups=()
 depends=('qt' 'qjson')
