@@ -93,12 +93,6 @@ class AbstractServer: public QObject {
          */
         virtual QString streamUrl(const Station& station, const Format& format) const = 0;
 
-    private slots:
-        inline virtual void processGenres() {}
-        virtual void processStations() = 0;
-        virtual void processFormats() = 0;
-        virtual void processTrack() = 0;
-
     signals:
         void genres(QList<Core::Genre> list);
         void stations(QList<Core::Station> list);

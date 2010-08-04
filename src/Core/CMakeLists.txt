@@ -15,6 +15,7 @@ set(HeyTrack_Core_SRCS
 
 qt4_wrap_cpp(HeyTrack_Core_MOC
     AbstractServer.h
+    AbRadioServer.h
     AbstractPlayer.h
     StationModel.h
     FormatModel.h
