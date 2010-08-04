@@ -17,8 +17,6 @@
 
 /** @file
  * @brief Class HeyTrack::Core::PhononPlayer
- *
- * @todo add error reporting
  */
 
 #include "AbstractPlayer.h"
@@ -30,6 +28,10 @@ namespace Phonon {
 
 namespace HeyTrack { namespace Core {
 
+/**
+ * @brief Phonon player
+ * @todo add error reporting
+ */
 class PhononPlayer: public AbstractPlayer {
     PLAYER_DEFINE(PhononPlayer)
 
