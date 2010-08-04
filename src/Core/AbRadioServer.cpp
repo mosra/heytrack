@@ -105,6 +105,25 @@ void AbRadioServer::processFormats() {
     /** @todo Fix for HTML entities */
     query.setFocus(QString::fromUtf8(reply->readAll()).replace('&', ""));
 
+    /* Station nick */
+    QString src;
+
+    query.setQuery("*:html/*:body/*:div[@id='w']/*:div[@id='c']/*:div[@id='l']/*:div[@id='player']/*:div[@id='playerplugin']/*:object/*:param[@name='url']/@value/string()");
+    if(!query.isValid()) {
+        emit error("Cannot parse format list");
+        return;
+    }
+    query.evaluateTo(&src);
+
+    /* Regexp for getting nick from src */
+    QRegExp rxNick("/([^\\d/]+)(?:\\d+)\\.asx");
+    int nickPos = rxNick.indexIn(src);
+    if(nickPos == -1) {
+        emit error("Cannot parse format list");
+        return;
+    }
+
+    /* Format IDs, names */
     QStringList ids, names;
 
     query.setQuery("*:html/*:body/*:div[@id='w']/*:div[@id='c']/*:div[@id='l']/*:div[@id='player']/*:div[@id='qswitch']/*:select/*:option/@value/string()");
@@ -128,18 +147,18 @@ void AbRadioServer::processFormats() {
     }
 
     /* Regexp for separating bitrate from name */
-    QRegExp rx("(\\d+)(?=kbps)");
+    QRegExp rxBitrate("(\\d+)(?=kbps)");
 
     /* Create format list */
     QList<Format> list;
     for(int i = 0; i != ids.count(); ++i) {
-        int pos = rx.indexIn(names[i]);
+        int pos = rxBitrate.indexIn(names[i]);
         if(pos == -1) {
             emit error("Cannot parse format list");
             return;
         }
 
-        list.append(Format(ids[i].toUInt(), rx.cap(1), names[i]));
+        list.append(Format(ids[i].toUInt(), rxNick.cap(1) + rxBitrate.cap(1), names[i]));
     }
 
     emit formats(list);
@@ -196,8 +215,8 @@ void AbRadioServer::processTrack() {
 }
 
 QString AbRadioServer::streamUrl(const Station& station, const Format& format) const {
-    return QString("http://static.abradio.cz/data/s/%0/playlist/%1%2.asx")
-        .arg(station.id()).arg(station.nick()).arg(format.nick());
+    return QString("http://static.abradio.cz/data/s/%0/playlist/%2.asx")
+        .arg(station.id()).arg(format.nick());
 }
 
 }}
