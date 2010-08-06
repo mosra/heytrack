@@ -6,6 +6,7 @@ include_directories(${QJSON_INCLUDE_DIRS} ${QT_PHONON_INCLUDE_DIR})
 set(HeyTrack_Core_SRCS
     AbstractServer.cpp
     AbRadioServer.cpp
+    RockmaxServer.cpp
     AbstractPlayer.cpp
     VlcPlayer.cpp
     PhononPlayer.cpp
@@ -17,6 +18,7 @@ set(HeyTrack_Core_SRCS
 qt4_wrap_cpp(HeyTrack_Core_MOC
     AbstractServer.h
     AbRadioServer.h
+    RockmaxServer.h
     AbstractPlayer.h
     StationModel.h
     FormatModel.h

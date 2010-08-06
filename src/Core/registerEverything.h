@@ -15,6 +15,7 @@
 
 #include "AbstractServer.h"
 #include "AbRadioServer.h"
+#include "RockmaxServer.h"
 #include "VlcPlayer.h"
 #include "PhononPlayer.h"
 
@@ -22,6 +23,7 @@ namespace HeyTrack { namespace Core {
 
 inline void registerEverything() {
     SERVER_REGISTER("ABRadio.cz", AbRadioServer)
+    SERVER_REGISTER("Rockmax.cz", RockmaxServer)
     PLAYER_REGISTER("VLC", VlcPlayer)
     PLAYER_REGISTER("Phonon", PhononPlayer)
 }
