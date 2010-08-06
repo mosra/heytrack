@@ -149,7 +149,7 @@ void SettingsDialog::updateStations(const QList<Station>& _stations) {
     connect(stations, SIGNAL(currentIndexChanged(int)), SLOT(getFormats()));
 
     /* Set station to user saved */
-    if(settings->contains("station/id"))
+    if(settings->contains("station/id") && settings->value("genre/id") == genres->itemData(genres->currentIndex()))
         stations->setCurrentIndex(stations->findData(settings->value("station/id", 0), StationModel::Id));
 }
 
@@ -161,7 +161,7 @@ void SettingsDialog::updateFormats(const QList<Format>& _formats) {
     formats->setModel(m);
 
     /* Set format to user saved */
-    if(settings->contains("format/id"))
+    if(settings->contains("format/id") && settings->value("station/id") == stations->itemData(stations->currentIndex()))
         formats->setCurrentIndex(formats->findData(settings->value("format/id", 0), FormatModel::Id));
 }
 
