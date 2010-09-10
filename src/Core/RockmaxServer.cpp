@@ -56,20 +56,14 @@ void RockmaxServer::processTrack() {
         return;
     }
 
-    /* Regexp for getting timestamp */
-    QRegExp rxStamp("stamp=\\d{3}(\\d+)");
-    int stampPos = rxStamp.indexIn(content);
-    if(stampPos == -1) {
-        emit error("Cannot parse timestamp");
-        return;
-    }
+    /* If current artist and title is the same as in last check, exit */
+    QString currentArtist = rxSong.cap(1),
+        currentTitle = rxSong.cap(2);
+    if(currentArtist == lastArtist && currentTitle == lastTitle) return;
 
-    /* If track wasn't updated, nothing to do */
-    quint32 update = rxStamp.cap(1).toUInt();
-    if(lastUpdate == update && update != 0) return;
-    lastUpdate = update;
-
-    qDebug() << update;
+    /* Save artist and title for next check */
+    lastArtist = currentArtist;
+    lastTitle = currentTitle;
 
     emit track(Track(currentArtist, currentTitle));
 }

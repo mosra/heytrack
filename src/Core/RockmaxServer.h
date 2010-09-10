@@ -29,9 +29,6 @@ class RockmaxServer: public AbstractServer {
 
     SERVER_DEFINE(RockmaxServer)
 
-    private:
-        unsigned int lastUpdate;
-
     public:
         inline RockmaxServer(QObject* parent = 0): AbstractServer(parent), lastUpdate(0) {}
 
@@ -44,6 +41,9 @@ class RockmaxServer: public AbstractServer {
 
     private slots:
         virtual void processTrack();
+
+    private:
+        QString lastArtist, lastTitle;
 };
 
 }}
