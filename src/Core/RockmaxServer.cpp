@@ -17,9 +17,19 @@
 
 #include <QtCore/QUrl>
 #include <QtCore/QStringList>
+#include <QtCore/QTextCodec>
 #include <QtNetwork/QNetworkReply>
 
 namespace HeyTrack { namespace Core {
+
+RockmaxServer::RockmaxServer(QObject* parent): AbstractServer(parent) {
+    codec = QTextCodec::codecForName("Windows-1250");
+    decoder = codec->makeDecoder();
+}
+
+RockmaxServer::~RockmaxServer() {
+    delete decoder;
+}
 
 void RockmaxServer::getStations(const Genre& genre) {
     QList<Station> list;
@@ -45,7 +55,7 @@ void RockmaxServer::processTrack() {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
     if(!reply) return;
 
-    QByteArray content = reply->readAll();
+    QString content = decoder->toUnicode(reply->readAll());
     reply->deleteLater();
 
     /* Regexp for getting song artist and title */

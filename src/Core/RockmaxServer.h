@@ -17,6 +17,9 @@
 
 #include "AbstractServer.h"
 
+class QTextCodec;
+class QTextDecoder;
+
 namespace HeyTrack { namespace Core {
 
 /**
@@ -30,7 +33,8 @@ class RockmaxServer: public AbstractServer {
     SERVER_DEFINE(RockmaxServer)
 
     public:
-        inline RockmaxServer(QObject* parent = 0): AbstractServer(parent), lastUpdate(0) {}
+        RockmaxServer(QObject* parent = 0);
+        virtual ~RockmaxServer();
 
     public slots:
         virtual void getStations(const Genre& genre = Genre());
@@ -44,6 +48,8 @@ class RockmaxServer: public AbstractServer {
 
     private:
         QString lastArtist, lastTitle;
+        QTextCodec *codec;
+        QTextDecoder *decoder;
 };
 
 }}
