@@ -18,8 +18,6 @@
 #include <QtCore/QUrl>
 #include <QtCore/QStringList>
 #include <QtNetwork/QNetworkReply>
-#include <QDebug>
-
 
 namespace HeyTrack { namespace Core {
 
@@ -73,8 +71,7 @@ void RockmaxServer::processTrack() {
 
     qDebug() << update;
 
-    Track t(rxSong.cap(1), rxSong.cap(2));
-    emit track(t);
+    emit track(Track(currentArtist, currentTitle));
 }
 
 QString RockmaxServer::streamUrl(const Station& station, const Format& format) const {
