@@ -33,7 +33,7 @@ namespace HeyTrack { namespace Settings {
 
 using namespace Core;
 
-SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, AbstractPlayer** _player, QWidget* parent): QDialog(parent), settings(_settings), server(_server), player(_player) {
+SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, AbstractPlayer** _player, QWidget* parent): QDialog(parent), settings(_settings), server(_server), selectedServer(0), player(_player) {
     setWindowTitle(tr("HeyTrack settings"));
 
     /* Initialize comboboxes */
@@ -53,7 +53,7 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, A
     connect(servers, SIGNAL(currentIndexChanged(QString)), SLOT(setServer(QString)));
 
     /* Get genre list for the default server */
-    (*server)->getGenres();
+    selectedServer->getGenres();
 
     /* Initialize player */
     if(settings->contains("player"))
@@ -86,6 +86,10 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, A
 }
 
 void SettingsDialog::accept() {
+    /* Set global server to selected */
+    if(*server) delete *server;
+    *server = selectedServer;
+
     settings->setValue("server", servers->currentText());
     settings->setValue("player", players->currentText());
 
@@ -103,20 +107,20 @@ void SettingsDialog::accept() {
 }
 
 void SettingsDialog::setServer(const QString& name) {
-    if(*server) delete *server;
-    (*server) = AbstractServer::instance(name, qApp);
+    if(selectedServer) delete selectedServer;
+    selectedServer = AbstractServer::instance(name, qApp);
 
-    connect(*server, SIGNAL(genres(QList<Core::Genre>)), SLOT(updateGenres(QList<Core::Genre>)));
-    connect(*server, SIGNAL(stations(QList<Core::Station>)), SLOT(updateStations(QList<Core::Station>)));
-    connect(*server, SIGNAL(formats(QList<Core::Format>)), SLOT(updateFormats(QList<Core::Format>)));
-    connect(*server, SIGNAL(error(QString)), SLOT(error(QString)));
+    connect(selectedServer, SIGNAL(genres(QList<Core::Genre>)), SLOT(updateGenres(QList<Core::Genre>)));
+    connect(selectedServer, SIGNAL(stations(QList<Core::Station>)), SLOT(updateStations(QList<Core::Station>)));
+    connect(selectedServer, SIGNAL(formats(QList<Core::Format>)), SLOT(updateFormats(QList<Core::Format>)));
+    connect(selectedServer, SIGNAL(error(QString)), SLOT(error(QString)));
 
     /* Clear genres, stations and formats for new list */
     genres->clear();
     stations->clear();
     formats->clear();
 
-    (*server)->getGenres();
+    selectedServer->getGenres();
 }
 
 void SettingsDialog::setPlayer(const QString& name) {
@@ -129,14 +133,14 @@ void SettingsDialog::setGenre(int index) {
     formats->clear();
 
     if(index != -1)
-        (*server)->getStations(qobject_cast<GenreModel*>(genres->model())->genre(index));
+        selectedServer->getStations(qobject_cast<GenreModel*>(genres->model())->genre(index));
 }
 
 void SettingsDialog::setStation(int index) {
     formats->clear();
 
     if(index != -1)
-        (*server)->getFormats(qobject_cast<StationModel*>(stations->model())->station(index));
+        selectedServer->getFormats(qobject_cast<StationModel*>(stations->model())->station(index));
 }
 
 void SettingsDialog::updateGenres(const QList<Genre>& _genres) {

@@ -50,6 +50,7 @@ class SettingsDialog: public QDialog {
 
     private:
         Core::AbstractServer** server;
+        Core::AbstractServer* selectedServer;
         Core::AbstractPlayer** player;
 
     public:
