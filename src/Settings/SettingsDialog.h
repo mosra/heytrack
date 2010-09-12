@@ -76,7 +76,7 @@ class SettingsDialog: public QDialog {
         void setServer(const QString& name);
         void setPlayer(const QString& name);
         void setGenre(int index);
-        void getFormats();
+        void setStation(int index);
         void updateGenres(const QList<Core::Genre>& _genres);
         void updateStations(const QList<Core::Station>& _stations);
         void updateFormats(const QList<Core::Format>& _formats);

@@ -132,8 +132,11 @@ void SettingsDialog::setGenre(int index) {
         (*server)->getStations(qobject_cast<GenreModel*>(genres->model())->genre(index));
 }
 
-void SettingsDialog::getFormats() {
-    (*server)->getFormats(qobject_cast<StationModel*>(stations->model())->station(stations->currentIndex()));
+void SettingsDialog::setStation(int index) {
+    formats->clear();
+
+    if(index != -1)
+        (*server)->getFormats(qobject_cast<StationModel*>(stations->model())->station(index));
 }
 
 void SettingsDialog::updateGenres(const QList<Genre>& _genres) {
@@ -151,13 +154,13 @@ void SettingsDialog::updateGenres(const QList<Genre>& _genres) {
 }
 
 void SettingsDialog::updateStations(const QList<Station>& _stations) {
-    disconnect(stations, SIGNAL(currentIndexChanged(int)), this, SLOT(getFormats()));
+    disconnect(stations, SIGNAL(currentIndexChanged(int)), this, SLOT(setStation(int)));
 
     StationModel* m = new StationModel(_stations, this);
     stations->clear();
     stations->setModel(m);
 
-    connect(stations, SIGNAL(currentIndexChanged(int)), SLOT(getFormats()));
+    connect(stations, SIGNAL(currentIndexChanged(int)), SLOT(setStation(int)));
 
     /* Set station to user saved */
     if(settings->contains("station/id") && settings->value("genre/id") == genres->itemData(genres->currentIndex()))
