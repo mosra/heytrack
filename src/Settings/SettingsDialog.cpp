@@ -142,8 +142,7 @@ void SettingsDialog::setStation(int index) {
 void SettingsDialog::updateGenres(const QList<Genre>& _genres) {
     disconnect(genres, SIGNAL(currentIndexChanged(int)), this, SLOT(setGenre(int)));
 
-    GenreModel* m = new GenreModel(_genres, this);
-    genres->clear();
+    GenreModel* m = new GenreModel(_genres, genres);
     genres->setModel(m);
 
     connect(genres, SIGNAL(currentIndexChanged(int)), SLOT(setGenre(int)));
@@ -156,8 +155,7 @@ void SettingsDialog::updateGenres(const QList<Genre>& _genres) {
 void SettingsDialog::updateStations(const QList<Station>& _stations) {
     disconnect(stations, SIGNAL(currentIndexChanged(int)), this, SLOT(setStation(int)));
 
-    StationModel* m = new StationModel(_stations, this);
-    stations->clear();
+    StationModel* m = new StationModel(_stations, stations);
     stations->setModel(m);
 
     connect(stations, SIGNAL(currentIndexChanged(int)), SLOT(setStation(int)));
@@ -170,8 +168,7 @@ void SettingsDialog::updateStations(const QList<Station>& _stations) {
 void SettingsDialog::updateFormats(const QList<Format>& _formats) {
     /** @bug Replies doesn't always come in the same order as requests -
             fill the combobox with only the last requested reply */
-    FormatModel* m = new FormatModel(_formats, this);
-    formats->clear();
+    FormatModel* m = new FormatModel(_formats, formats);
     formats->setModel(m);
 
     /* Set format to user saved */
