@@ -145,11 +145,12 @@ void SettingsDialog::updateGenres(const QList<Genre>& _genres) {
     GenreModel* m = new GenreModel(_genres, genres);
     genres->setModel(m);
 
-    connect(genres, SIGNAL(currentIndexChanged(int)), SLOT(setGenre(int)));
-
     /* Set genre to user saved */
     if(settings->contains("genre/id") && settings->value("server") == servers->currentText())
         genres->setCurrentIndex(genres->findData(settings->value("genre/id", 0)));
+    setGenre(genres->currentIndex());
+
+    connect(genres, SIGNAL(currentIndexChanged(int)), SLOT(setGenre(int)));
 }
 
 void SettingsDialog::updateStations(const QList<Station>& _stations) {
@@ -158,11 +159,12 @@ void SettingsDialog::updateStations(const QList<Station>& _stations) {
     StationModel* m = new StationModel(_stations, stations);
     stations->setModel(m);
 
-    connect(stations, SIGNAL(currentIndexChanged(int)), SLOT(setStation(int)));
-
     /* Set station to user saved */
     if(settings->contains("station/id") && settings->value("genre/id") == genres->itemData(genres->currentIndex()))
         stations->setCurrentIndex(stations->findData(settings->value("station/id", 0), StationModel::Id));
+    setStation(stations->currentIndex());
+
+    connect(stations, SIGNAL(currentIndexChanged(int)), SLOT(setStation(int)));
 }
 
 void SettingsDialog::updateFormats(const QList<Format>& _formats) {
