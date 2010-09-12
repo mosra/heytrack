@@ -76,10 +76,10 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, A
     acceptButton = buttons->button(QDialogButtonBox::Ok);
 
     QGridLayout* layout = new QGridLayout(this);
-    layout->addWidget(new QLabel(tr("Server:")), 0, 0);
-    layout->addWidget(servers, 0, 1);
-    layout->addWidget(new QLabel(tr("Player:")), 1, 0);
-    layout->addWidget(players, 1, 1);
+    layout->addWidget(new QLabel(tr("Player:")), 0, 0);
+    layout->addWidget(players, 0, 1);
+    layout->addWidget(new QLabel(tr("Server:")), 1, 0);
+    layout->addWidget(servers, 1, 1);
     layout->addWidget(new QLabel(tr("Genre:")), 2, 0);
     layout->addWidget(genres, 2, 1);
     layout->addWidget(new QLabel(tr("Station:")), 3, 0);
