@@ -33,7 +33,7 @@ namespace HeyTrack { namespace Settings {
 
 using namespace Core;
 
-SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, AbstractPlayer** _player, QWidget* parent): QDialog(parent), settings(_settings), server(_server), selectedServer(0), player(_player) {
+SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, AbstractPlayer** _player, QWidget* parent): QDialog(parent), settings(_settings), server(_server), selectedServer(0), player(_player), selectedPlayer(0) {
     setWindowTitle(tr("HeyTrack settings"));
 
     /* Initialize comboboxes */
@@ -90,6 +90,10 @@ void SettingsDialog::accept() {
     if(*server) delete *server;
     *server = selectedServer;
 
+    /* Set global player to selected */
+    if(*player) delete *player;
+    *player = selectedPlayer;
+
     settings->setValue("server", servers->currentText());
     settings->setValue("player", players->currentText());
 
@@ -124,8 +128,8 @@ void SettingsDialog::setServer(const QString& name) {
 }
 
 void SettingsDialog::setPlayer(const QString& name) {
-    if(*player) delete *player;
-    (*player) = AbstractPlayer::instance(name, qApp);
+    if(selectedPlayer) delete selectedPlayer;
+    selectedPlayer = AbstractPlayer::instance(name, qApp);
 }
 
 void SettingsDialog::setGenre(int index) {
