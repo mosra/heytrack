@@ -43,8 +43,6 @@ namespace Settings {
 /**
  * @brief Settings dialog
  * @bug After opening with Radio Click & Country, format is not retrieved.
- * @todo Don't fetch format if station index == -1
- * @bug Phonon player is stopped after opening dialog
  */
 class SettingsDialog: public QDialog {
     Q_OBJECT
