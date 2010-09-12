@@ -28,4 +28,15 @@ QVariant StationModel::data(const QModelIndex& index, int role) const {
     return QVariant();
 }
 
+bool StationModel::removeRows(int row, int count, const QModelIndex& parent) {
+    if(row < 0 || row+count > stations.size()) return false;
+
+    beginRemoveRows(parent, row, row+count-1);
+    for(int i = row+count-1; i >= 0; --i)
+        stations.removeAt(i);
+    endRemoveRows();
+
+    return true;
+}
+
 }}

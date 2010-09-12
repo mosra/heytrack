@@ -40,6 +40,8 @@ class GenreModel: public QAbstractListModel {
 
         virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
+        virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
+
         Genre genre(int row) const;
 };
 
