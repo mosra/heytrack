@@ -22,6 +22,7 @@
 #include <QtGui/QComboBox>
 #include <QtGui/QLabel>
 #include <QtGui/QMessageBox>
+#include <QtGui/QPushButton>
 
 #include "Core/AbRadioServer.h"
 #include "Core/GenreModel.h"
@@ -60,11 +61,19 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, A
         players->setCurrentIndex(players->findText(settings->value("player").toString()));
     setPlayer(settings->value("player", players->itemText(0)).toString());
 
+    /* Enable accept button only if required comboboxes have valid indexes */
+    connect(servers, SIGNAL(currentIndexChanged(int)), SLOT(checkAcceptable()));
+    connect(players, SIGNAL(currentIndexChanged(int)), SLOT(checkAcceptable()));
+    connect(genres, SIGNAL(currentIndexChanged(int)), SLOT(checkAcceptable()));
+    connect(stations, SIGNAL(currentIndexChanged(int)), SLOT(checkAcceptable()));
+    connect(formats, SIGNAL(currentIndexChanged(int)), SLOT(checkAcceptable()));
+
     /* Buttons */
     QDialogButtonBox* buttons =
         new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     connect(buttons, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttons, SIGNAL(rejected()), this, SLOT(reject()));
+    acceptButton = buttons->button(QDialogButtonBox::Ok);
 
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(new QLabel(tr("Server:")), 0, 0);
@@ -83,6 +92,18 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, A
     setLayout(layout);
 
     setMinimumWidth(320);
+}
+
+void SettingsDialog::checkAcceptable() {
+    /* Everything must be selected */
+    if(servers->currentIndex() == -1 ||
+       players->currentIndex() == -1 ||
+       genres->currentIndex() == -1 ||
+       stations->currentIndex() == -1 ||
+       formats->currentIndex() == -1)
+        acceptButton->setDisabled(true);
+
+    else acceptButton->setEnabled(true);
 }
 
 void SettingsDialog::accept() {

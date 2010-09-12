@@ -29,6 +29,7 @@ class QComboBox;
 class QCheckBox;
 class QSettings;
 class QLineEdit;
+class QPushButton;
 
 namespace HeyTrack {
 
@@ -71,10 +72,11 @@ class SettingsDialog: public QDialog {
             *stations,
             *formats;
 
-    private slots:
-        virtual void accept();      /**< @brief Accept dialog */
+        QPushButton* acceptButton;
 
     private slots:
+        virtual void accept();      /**< @brief Accept dialog */
+        void checkAcceptable();
         void setServer(const QString& name);
         void setPlayer(const QString& name);
         void setGenre(int index);
