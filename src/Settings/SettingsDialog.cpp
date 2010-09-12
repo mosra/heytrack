@@ -148,7 +148,7 @@ void SettingsDialog::updateGenres(const QList<Genre>& _genres) {
     connect(genres, SIGNAL(currentIndexChanged(int)), SLOT(setGenre(int)));
 
     /* Set genre to user saved */
-    if(settings->contains("genre/id"))
+    if(settings->contains("genre/id") && settings->value("server") == servers->currentText())
         genres->setCurrentIndex(genres->findData(settings->value("genre/id", 0)));
 }
 
