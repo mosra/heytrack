@@ -70,10 +70,10 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, A
 
     /* Buttons */
     QDialogButtonBox* buttons =
-        new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+        new QDialogButtonBox(QDialogButtonBox::Save|QDialogButtonBox::Cancel);
     connect(buttons, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttons, SIGNAL(rejected()), this, SLOT(reject()));
-    acceptButton = buttons->button(QDialogButtonBox::Ok);
+    acceptButton = buttons->button(QDialogButtonBox::Save);
 
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(new QLabel(tr("Player:")), 0, 0);
