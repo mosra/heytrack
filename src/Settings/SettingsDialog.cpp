@@ -124,8 +124,12 @@ void SettingsDialog::setPlayer(const QString& name) {
     (*player) = AbstractPlayer::instance(name, qApp);
 }
 
-void SettingsDialog::getStations() {
-    (*server)->getStations(qobject_cast<GenreModel*>(genres->model())->genre(genres->currentIndex()));
+void SettingsDialog::setGenre(int index) {
+    stations->clear();
+    formats->clear();
+
+    if(index != -1)
+        (*server)->getStations(qobject_cast<GenreModel*>(genres->model())->genre(index));
 }
 
 void SettingsDialog::getFormats() {
@@ -133,13 +137,13 @@ void SettingsDialog::getFormats() {
 }
 
 void SettingsDialog::updateGenres(const QList<Genre>& _genres) {
-    disconnect(genres, SIGNAL(currentIndexChanged(int)), this, SLOT(getStations()));
+    disconnect(genres, SIGNAL(currentIndexChanged(int)), this, SLOT(setGenre(int)));
 
     GenreModel* m = new GenreModel(_genres, this);
     genres->clear();
     genres->setModel(m);
 
-    connect(genres, SIGNAL(currentIndexChanged(int)), SLOT(getStations()));
+    connect(genres, SIGNAL(currentIndexChanged(int)), SLOT(setGenre(int)));
 
     /* Set genre to user saved */
     if(settings->contains("genre/id"))
