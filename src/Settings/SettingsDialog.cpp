@@ -110,6 +110,13 @@ void SettingsDialog::setServer(const QString& name) {
     connect(*server, SIGNAL(stations(QList<Core::Station>)), SLOT(updateStations(QList<Core::Station>)));
     connect(*server, SIGNAL(formats(QList<Core::Format>)), SLOT(updateFormats(QList<Core::Format>)));
     connect(*server, SIGNAL(error(QString)), SLOT(error(QString)));
+
+    /* Clear genres, stations and formats for new list */
+    genres->clear();
+    stations->clear();
+    formats->clear();
+
+    (*server)->getGenres();
 }
 
 void SettingsDialog::setPlayer(const QString& name) {
