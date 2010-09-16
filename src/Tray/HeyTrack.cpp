@@ -21,13 +21,13 @@
 #include <QtGui/QApplication>
 #include <QtGui/QCloseEvent>
 #include <QtGui/QAction>
-#include <QtGui/QStyle>
 #include <QtGui/QLabel>
 #include <QtGui/QPushButton>
 #include <QtGui/QHBoxLayout>
 
 #include "Core/AbstractServer.h"
 #include "Core/AbstractPlayer.h"
+#include "Core/Style.h"
 #include "Settings/SettingsDialog.h"
 
 namespace HeyTrack { namespace Tray {
@@ -37,6 +37,9 @@ using namespace Settings;
 
 HeyTrack::HeyTrack(QWidget* parent): QWidget(parent), server(0), player(0) {
     settings.setIniCodec("UTF-8");
+
+    /* Initalize style */
+    new Style(":/icons.png", this);
 
     nowPlaying = new QLabel(tr("Initialization..."));
     settingsButton = new QPushButton(tr("Open settings"));
@@ -54,29 +57,29 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent), server(0), player(0) {
 
     /* Tray icon */
     tray = new QSystemTrayIcon(this);
-    tray->setIcon(style()->standardIcon(QStyle::SP_MediaStop).pixmap(16,16));
+    tray->setIcon(Style::style()->bigIcon(Style::HeyTrack));
     connect(tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(toggleVisibility(QSystemTrayIcon::ActivationReason)));
 
     /* Tray icon context menu */
     QMenu* menu = new QMenu(this);
     menu->addAction(
-        style()->standardIcon(QStyle::SP_DriveFDIcon).pixmap(16,16),
+        Style::style()->icon(Style::Settings),
         tr("Settings"), this, SLOT(openSettings()));
     menu->addAction(
-        style()->standardIcon(QStyle::SP_MediaPlay),
+        Style::style()->icon(Style::Play),
         tr("Play stream in player"), this, SLOT(play()));
     menu->addAction(
-        style()->standardIcon(QStyle::SP_MediaStop),
+        Style::style()->icon(Style::Stop),
         tr("Stop player"), this, SLOT(stop()));
     menu->addAction(
-        style()->standardIcon(QStyle::SP_DialogCloseButton).pixmap(16,16),
+        Style::style()->icon(Style::Exit),
         tr("Exit"), qApp, SLOT(quit()));
     tray->setContextMenu(menu);
     tray->show();
 
     /* Window icon, title, fixed size */
-    setWindowIcon(style()->standardIcon(QStyle::SP_MediaPlay).pixmap(16,16));
+    setWindowIcon(Style::style()->bigIcon(Style::HeyTrack));
     setFixedSize(320,50);
 
     initialize();
@@ -127,7 +130,6 @@ void HeyTrack::track(Track t) {
 
     /* Tray icon message */
     tray->showMessage(tr("%0: now playing").arg(station.name()), t.artist() + " - " + t.title());
-    tray->setIcon(style()->standardIcon(QStyle::SP_MediaPlay).pixmap(16,16));
     tray->setToolTip(tr("%0: ").arg(station.name()) + t.artist() + " - " + t.title());
 
     /* Next update after 20 seconds */

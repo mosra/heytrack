@@ -29,6 +29,7 @@
 #include "Core/StationModel.h"
 #include "Core/FormatModel.h"
 #include "Core/AbstractPlayer.h"
+#include "Core/Style.h"
 
 namespace HeyTrack { namespace Settings {
 
@@ -36,6 +37,7 @@ using namespace Core;
 
 SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, AbstractPlayer** _player, QWidget* parent): QDialog(parent), settings(_settings), server(_server), selectedServer(0), player(_player), selectedPlayer(0) {
     setWindowTitle(tr("HeyTrack settings"));
+    setWindowIcon(Style::style()->icon(Style::Settings));
 
     /* Initialize comboboxes */
     servers = new QComboBox;

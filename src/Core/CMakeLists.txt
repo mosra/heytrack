@@ -13,6 +13,7 @@ set(HeyTrack_Core_SRCS
     StationModel.cpp
     FormatModel.cpp
     GenreModel.cpp
+    Style.cpp
 )
 
 qt4_wrap_cpp(HeyTrack_Core_MOC
@@ -25,7 +26,11 @@ qt4_wrap_cpp(HeyTrack_Core_MOC
     GenreModel.h
 )
 
-add_library(HeyTrackCore SHARED ${HeyTrack_Core_SRCS} ${HeyTrack_Core_MOC})
+qt4_add_resources(HeyTrack_Core_QRC
+    graphics/graphics.qrc
+)
+
+add_library(HeyTrackCore SHARED ${HeyTrack_Core_SRCS} ${HeyTrack_Core_MOC} ${HeyTrack_Core_QRC})
 target_link_libraries(HeyTrackCore
     ${QT_QTCORE_LIBRARY}
     ${QT_QTNETWORK_LIBRARY}
