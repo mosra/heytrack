@@ -70,6 +70,12 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, A
     connect(stations, SIGNAL(currentIndexChanged(int)), SLOT(checkAcceptable()));
     connect(formats, SIGNAL(currentIndexChanged(int)), SLOT(checkAcceptable()));
 
+    /* Label with HeyTrack logo */
+    QLabel* logoLabel = new QLabel;
+    logoLabel->setPixmap(Style::style()->bigIcon(Style::HeyTrack).pixmap(128, 128));
+    logoLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+    logoLabel->setMinimumWidth(140);
+
     /* Buttons */
     QDialogButtonBox* buttons =
         new QDialogButtonBox(QDialogButtonBox::Save|QDialogButtonBox::Cancel);
@@ -78,22 +84,24 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, A
     acceptButton = buttons->button(QDialogButtonBox::Save);
 
     QGridLayout* layout = new QGridLayout(this);
-    layout->addWidget(new QLabel(tr("Player:")), 0, 0);
-    layout->addWidget(players, 0, 1);
-    layout->addWidget(new QLabel(tr("Server:")), 1, 0);
-    layout->addWidget(servers, 1, 1);
-    layout->addWidget(new QLabel(tr("Genre:")), 2, 0);
-    layout->addWidget(genres, 2, 1);
-    layout->addWidget(new QLabel(tr("Station:")), 3, 0);
-    layout->addWidget(stations, 3, 1);
-    layout->addWidget(new QLabel(tr("Stream format:")), 4, 0);
-    layout->addWidget(formats, 4, 1);
-    layout->addWidget(buttons, 5, 0, 1, 2);
+    layout->addWidget(logoLabel, 0, 0, 5, 1);
+    layout->addWidget(new QLabel(tr("Player:")), 0, 1);
+    layout->addWidget(players, 0, 2);
+    layout->addWidget(new QLabel(tr("Server:")), 1, 1);
+    layout->addWidget(servers, 1, 2);
+    layout->addWidget(new QLabel(tr("Genre:")), 2, 1);
+    layout->addWidget(genres, 2, 2);
+    layout->addWidget(new QLabel(tr("Station:")), 3, 1);
+    layout->addWidget(stations, 3, 2);
+    layout->addWidget(new QLabel(tr("Stream format:")), 4, 1);
+    layout->addWidget(formats, 4, 2);
+    layout->addWidget(buttons, 5, 0, 1, 3);
     layout->setColumnStretch(0, 0);
-    layout->setColumnStretch(1, 1);
+    layout->setColumnStretch(1, 0);
+    layout->setColumnStretch(2, 1);
     setLayout(layout);
 
-    setMinimumWidth(320);
+    setMinimumWidth(420);
 }
 
 void SettingsDialog::checkAcceptable() {
