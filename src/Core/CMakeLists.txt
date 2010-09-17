@@ -33,6 +33,7 @@ qt4_add_resources(HeyTrack_Core_QRC
 add_library(HeyTrackCore SHARED ${HeyTrack_Core_SRCS} ${HeyTrack_Core_MOC} ${HeyTrack_Core_QRC})
 target_link_libraries(HeyTrackCore
     ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
     ${QT_QTNETWORK_LIBRARY}
     ${QT_QTXMLPATTERNS_LIBRARY}
     ${QT_QTDBUS_LIBRARY}
