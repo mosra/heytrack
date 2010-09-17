@@ -17,8 +17,7 @@
 
 #include <phonon/AudioOutput>
 #include <phonon/MediaObject>
-#include <QUrl>
-
+#include <QtCore/QUrl>
 
 namespace HeyTrack { namespace Core {
 
