@@ -8,13 +8,19 @@ set(HeyTrack_Core_SRCS
     AbRadioServer.cpp
     RockmaxServer.cpp
     AbstractPlayer.cpp
-    VlcPlayer.cpp
     PhononPlayer.cpp
     StationModel.cpp
     FormatModel.cpp
     GenreModel.cpp
     Style.cpp
 )
+
+if(NOT WIN32)
+    set(HeyTrack_Core_SRCS
+        ${HeyTrack_Core_SRCS}
+        VlcPlayer.cpp
+    )
+endif()
 
 qt4_wrap_cpp(HeyTrack_Core_MOC
     AbstractServer.h
