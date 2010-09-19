@@ -633,6 +633,8 @@ FunctionEnd
 ;Installer Sections
 
 Section "-Core installation"
+  @CPACK_NSIS_EXTRA_INSTALL_COMMANDS@
+
   ;Use the entire tree produced by the INSTALL target.  Keep the
   ;list of directories here in sync with the RMDir commands below.
   SetOutPath "$INSTDIR"
@@ -715,8 +717,6 @@ Section "-Core installation"
   Call ConditionalAddToRegisty
 
   !insertmacro MUI_STARTMENU_WRITE_END
-
-@CPACK_NSIS_EXTRA_INSTALL_COMMANDS@
 
 SectionEnd
 
