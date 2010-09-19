@@ -11,7 +11,10 @@ qt4_wrap_cpp(HeyTrack_Tray_MOC
     HeyTrack.h
 )
 
+# Diable console window, executable icon for WIN32
 if(WIN32)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mwindows -Wl,-subsystem,windows")
+
     enable_language(RC)
     set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> -O coff <FLAGS> -o <OBJECT> -i <SOURCE>")
     set(HeyTrack_Tray_SRCS ${HeyTrack_Tray_SRCS} ${CMAKE_SOURCE_DIR}/graphics/win-icon.rc)
@@ -40,5 +43,4 @@ if(WIN32)
         QtXmlPatterns4.dll
         PATHS ${DLL_SEARCH_PATH}
     )
-
 endif()
