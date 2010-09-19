@@ -36,7 +36,7 @@ HeyTrack::HeyTrack(QObject* parent, const QVariantList& args): Applet(parent, ar
 
     /* Localizations */
     QTranslator* translator = new QTranslator(this);
-    translator->load("l10n/" + QLocale::system().name(), HEYTRACK_DATA_DIR);
+    translator->load(QLocale::system().name(), HEYTRACK_TRANSLATION_DIR);
     qApp->installTranslator(translator);
 
     settings.setIniCodec("UTF-8");

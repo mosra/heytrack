@@ -20,4 +20,4 @@ endif(WIN32)
 add_executable(heytrack ${HeyTrack_Tray_SRCS} ${HeyTrack_Tray_MOC})
 target_link_libraries(heytrack HeyTrackCore HeyTrackSettings ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 
-install(TARGETS heytrack DESTINATION bin)
+install(TARGETS heytrack DESTINATION ${HEYTRACK_BINARY_DIR})

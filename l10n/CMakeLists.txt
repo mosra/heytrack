@@ -6,4 +6,4 @@ qt4_add_translation(HeyTrack_QM
 
 add_custom_target(HeyTrackLocalization ALL DEPENDS ${HeyTrack_QM})
 
-install(FILES ${HeyTrack_QM} DESTINATION ${HEYTRACK_DATA_DIR}/l10n)
+install(FILES ${HeyTrack_QM} DESTINATION ${HEYTRACK_TRANSLATION_DIR})

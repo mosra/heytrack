@@ -39,7 +39,8 @@ int main(int argc, char** argv) {
     /* Localizations */
     QTranslator translatorQt, translator;
     translatorQt.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    translator.load("l10n/" + QLocale::system().name(), HEYTRACK_DATA_DIR);
+    translator.load(QLocale::system().name(), HEYTRACK_TRANSLATION_DIR);
+
     app.installTranslator(&translatorQt);
     app.installTranslator(&translator);
 

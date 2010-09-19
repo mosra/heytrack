@@ -47,4 +47,4 @@ target_link_libraries(HeyTrackCore
     ${QT_PHONON_LIBRARY}
 )
 
-install(TARGETS HeyTrackCore DESTINATION lib)
+install(TARGETS HeyTrackCore DESTINATION ${HEYTRACK_LIBRARY_DIR})
