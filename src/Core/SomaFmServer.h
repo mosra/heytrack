@@ -30,6 +30,8 @@ namespace HeyTrack { namespace Core {
  * Second approach: Parsing well-formed XML
  * - Advantages: everything possible
  * - Disadvantages: no Windows Media, firewall friendly streams
+ * @todo Don't download the same data many times
+ * @todo On fast (genre) switching errors pop out
  */
 class SomaFmServer: public AbstractServer {
     Q_OBJECT
