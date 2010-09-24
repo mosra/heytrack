@@ -192,7 +192,7 @@ void AbRadioServer::processTrack() {
     lastUpdate = update;
 
     /* Root item for getting data */
-    query.setFocus("<root>" + result["html"].toString().replace("&nbsp;","") + "</root>");
+    query.setFocus("<root>" + result["html"].toString().replace('&',"") + "</root>");
 
     /* Artist */
     query.setQuery("root/li[@class='current']/span[@class='artistname']//text()");
