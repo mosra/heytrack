@@ -23,19 +23,66 @@
 
 namespace HeyTrack { namespace Core {
 
-SomaFmServer::SomaFmServer(QObject* parent): AbstractServer(parent), formatMapper(new QSignalMapper(this)), trackMapper(new QSignalMapper(this)) {
+SomaFmServer::SomaFmServer(QObject* parent): AbstractServer(parent) {
+    stationMapper = new QSignalMapper(this);
+    formatMapper = new QSignalMapper(this);
+    trackMapper = new QSignalMapper(this);
+    connect(stationMapper, SIGNAL(mapped(QString)), SLOT(processStations(QString)));
     connect(formatMapper, SIGNAL(mapped(QString)), SLOT(processFormats(QString)));
     connect(trackMapper, SIGNAL(mapped(QString)), SLOT(processTrack(QString)));
+}
+
+void SomaFmServer::getGenres() {
+    QNetworkReply* reply = manager->get(QNetworkRequest(QUrl("http://somafm.com/channels.xml?genres")));
+    connect(reply, SIGNAL(finished()), SLOT(processGenres()));
+}
+
+void SomaFmServer::processGenres() {
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+    if(!reply) return;
+
+    QXmlQuery query;
+    query.setFocus(QString::fromLatin1(reply->readAll()));
+    reply->deleteLater();
+
+    /* Get list of all genre lists */
+    QStringList genreListDirty;
+    query.setQuery("channels/channel/genre/string()");
+    if(!query.isValid()) {
+        emit error("Cannot parse genre list");
+        return;
+    }
+    query.evaluateTo(&genreListDirty);
+
+    /* Split genre list to single genres */
+    QStringList genreList;
+    foreach(const QString& genre, genreListDirty) {
+        genreList.append(genre.split("|"));
+    }
+
+    /* Unique and sorted list */
+    genreList.removeDuplicates();
+    genreList.sort();
+
+    /* Create actual list */
+    int id = 0;
+    QList<Genre> list;
+    foreach(const QString& genre, genreList) {
+        list << Genre(id++, genre);
+    }
+
+    emit genres(list);
 }
 
 void SomaFmServer::getStations(const Genre& genre) {
 //     QNetworkReply* reply = manager->get(QNetworkRequest(QUrl("http://somafm.com/listen/")));
     QNetworkReply* reply = manager->get(QNetworkRequest(QUrl("http://somafm.com/channels.xml")));
-    connect(reply, SIGNAL(finished()), SLOT(processStations()));
+    connect(reply, SIGNAL(finished()), stationMapper, SLOT(map()));
+    stationMapper->setMapping(reply, genre.name());
 }
 
-void SomaFmServer::processStations() {
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+void SomaFmServer::processStations(const QString& genre) {
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>(stationMapper->mapping(genre));
     if(!reply) return;
 
 //     QString data = QString::fromUtf8(reply->readAll())
@@ -71,6 +118,17 @@ void SomaFmServer::processStations() {
     QList<Station> list;
     for(QXmlItem station(result.next()); !station.isNull(); station = result.next()) {
         query.setFocus(station);
+
+        /* Check if station genre matches filter */
+        QString genreList;
+        query.setQuery("genre/string()");
+        if(!query.isValid()) {
+            emit error("Cannot parse station");
+            return;
+        }
+        query.evaluateTo(&genreList);
+
+        if(!genre.isEmpty() && !genreList.trimmed().split("|").contains(genre)) continue;
 
         /* Station nick */
         QString nick;

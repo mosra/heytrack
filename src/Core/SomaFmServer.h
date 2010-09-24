@@ -30,7 +30,6 @@ namespace HeyTrack { namespace Core {
  * Second approach: Parsing well-formed XML
  * - Advantages: everything possible
  * - Disadvantages: no Windows Media, firewall friendly streams
- * @todo Genres
  */
 class SomaFmServer: public AbstractServer {
     Q_OBJECT
@@ -41,18 +40,20 @@ class SomaFmServer: public AbstractServer {
         SomaFmServer(QObject* parent = 0);
 
     public slots:
+        virtual void getGenres();
         virtual void getStations(const Genre& genre = Genre());
         virtual void getFormats(const Station& station);
         virtual void getTrack(const Station& station);
         inline virtual QString streamUrl(const Station& station, const Format& format) const { return format.nick(); }
 
     private slots:
-        virtual void processStations();
+        virtual void processGenres();
+        virtual void processStations(const QString& genre);
         virtual void processFormats(const QString& station);
         virtual void processTrack(const QString& station);
 
     private:
-        QSignalMapper *formatMapper, *trackMapper;
+        QSignalMapper *stationMapper, *formatMapper, *trackMapper;
         QString lastArtist, lastTitle;
 };
 
