@@ -48,15 +48,12 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, A
     stations = new QComboBox;
     formats = new QComboBox;
 
-    /* Initialize server */
+    /* Initialize server (and get genre list) */
     if(settings->contains("server"))
         servers->setCurrentIndex(servers->findText(settings->value("server").toString()));
     setServer(settings->value("server", servers->itemText(0)).toString());
 
     connect(servers, SIGNAL(currentIndexChanged(QString)), SLOT(setServer(QString)));
-
-    /* Get genre list for the default server */
-    selectedServer->getGenres();
 
     /* Initialize player */
     if(settings->contains("player"))
