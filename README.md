@@ -12,6 +12,7 @@ Currently supported stream servers
 
 - ABradio.cz - http://www.abradio.cz/
 - Rockmax.cz - http://www.rockmax.cz/
+- SomaFM.com - http://somafm.com/
 
 Currently supported players
 ---------------------------
