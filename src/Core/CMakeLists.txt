@@ -7,6 +7,7 @@ set(HeyTrack_Core_SRCS
     AbstractServer.cpp
     AbRadioServer.cpp
     RockmaxServer.cpp
+    SomaFmServer.cpp
     AbstractPlayer.cpp
     PhononPlayer.cpp
     StationModel.cpp
@@ -26,6 +27,7 @@ qt4_wrap_cpp(HeyTrack_Core_MOC
     AbstractServer.h
     AbRadioServer.h
     RockmaxServer.h
+    SomaFmServer.h
     AbstractPlayer.h
     StationModel.h
     FormatModel.h

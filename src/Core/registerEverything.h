@@ -16,6 +16,7 @@
 #include "AbstractServer.h"
 #include "AbRadioServer.h"
 #include "RockmaxServer.h"
+#include "SomaFmServer.h"
 #include "PhononPlayer.h"
 
 /* D-BUS is Unix-only */
@@ -28,6 +29,7 @@ namespace HeyTrack { namespace Core {
 inline void registerEverything() {
     SERVER_REGISTER("ABRadio.cz", AbRadioServer)
     SERVER_REGISTER("Rockmax.cz", RockmaxServer)
+    SERVER_REGISTER("SomaFM.com", SomaFmServer)
     PLAYER_REGISTER("Phonon", PhononPlayer)
 
     /* D-BUS is Unix-only */
