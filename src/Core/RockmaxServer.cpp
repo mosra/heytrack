@@ -16,7 +16,7 @@
 #include "RockmaxServer.h"
 
 #include <QtCore/QUrl>
-#include <QtCore/QStringList>
+#include <QtCore/QRegExp>
 #include <QtCore/QTextCodec>
 #include <QtNetwork/QNetworkReply>
 
