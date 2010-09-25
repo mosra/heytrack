@@ -40,9 +40,9 @@ void RockmaxServer::getStations(const Genre& genre) {
 
 void RockmaxServer::getFormats(const Station& station) {
     QList<Format> list;
-    list.append(Format(1, "64", tr("format MP3 (%0 kbps)").arg(64)));
-    list.append(Format(2, "128", tr("format MP3 (%0 kbps)").arg(128)));
-    list.append(Format(3, "256", tr("format MP3 (%0 kbps)").arg(256)));
+    list.append(Format(1, "64", QString("MP3 %0 kbps").arg(64)));
+    list.append(Format(2, "128", QString("MP3 %0 kbps").arg(128)));
+    list.append(Format(3, "256", QString("MP3 %0 kbps").arg(256)));
     emit formats(list);
 }
 
