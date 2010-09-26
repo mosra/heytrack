@@ -78,8 +78,8 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, A
 
     /* Label for stream URL */
     QLabel* streamUrlLabel = new QLabel(tr("Stream URL: "
-        "<em>If you haven't supported player or no player is working, "
-        "you can try to play this URL manually.</em>"));
+        "<em>If your favourite player is not supported or no player is "
+        "working, you can try to play this URL manually.</em>"));
     streamUrlLabel->setWordWrap(true);
     streamUrlLabel->setAlignment(Qt::AlignJustify|Qt::AlignVCenter);
 
