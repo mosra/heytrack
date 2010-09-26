@@ -1,4 +1,4 @@
-version=0.99.70
+version=0.99.71
 
 cd ..
 git archive --prefix=heytrack-${version}/ -o package/heytrack-${version}.tar v${version} \
