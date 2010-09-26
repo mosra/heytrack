@@ -22,6 +22,7 @@
 /* D-BUS is Unix-only */
 #ifndef Q_WS_WIN
 #include "VlcPlayer.h"
+#include "AmarokPlayer.h"
 #endif
 
 namespace HeyTrack { namespace Core {
@@ -35,6 +36,7 @@ inline void registerEverything() {
     /* D-BUS is Unix-only */
     #ifndef Q_WS_WIN
     PLAYER_REGISTER("VLC", VlcPlayer)
+    PLAYER_REGISTER("Amarok", AmarokPlayer)
     #endif
 }
 

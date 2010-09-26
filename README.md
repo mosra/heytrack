@@ -19,6 +19,7 @@ Currently supported players
 
 - VLC (via DBUS)
 - internal Phonon player
+- Amarok (via DBUS)
 
 Installation
 ============
