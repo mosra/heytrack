@@ -36,15 +36,12 @@ void AmarokPlayer::play(const QString& url) {
 
     /* Otherwise parse asx playlist */
     else {
-        QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(url)));
-        connect(reply, SIGNAL(finished()), SLOT(processPlaylist()));
+        manager->get(QNetworkRequest(QUrl(url)));
+        connect(manager, SIGNAL(finished(QNetworkReply*)), SLOT(processPlaylist(QNetworkReply*)));
     }
 }
 
-void AmarokPlayer::processPlaylist() {
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-    if(!reply) return;
-
+void AmarokPlayer::processPlaylist(QNetworkReply* reply) {
     QRegExp rxUrl("<ref href\\s?=\\s?\"(.+)\"", Qt::CaseInsensitive);
     rxUrl.setMinimal(true);
 

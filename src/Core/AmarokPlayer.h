@@ -23,6 +23,7 @@
 
 class QDBusInterface;
 class QNetworkAccessManager;
+class QNetworkReply;
 
 namespace HeyTrack { namespace Core {
 
@@ -41,7 +42,7 @@ class AmarokPlayer: public AbstractPlayer {
         virtual void stop();
 
     private slots:
-        virtual void processPlaylist();
+        virtual void processPlaylist(QNetworkReply* reply);
 
     private:
         QDBusInterface *playerInterface,
