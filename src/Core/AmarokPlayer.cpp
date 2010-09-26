@@ -30,19 +30,18 @@ AmarokPlayer::AmarokPlayer(QObject* parent): AbstractPlayer(parent), manager(new
 void AmarokPlayer::play(const QString& url) {
     QRegExp rxAsx("\\.asx$");
 
-    if(rxAsx.indexIn(url) == -1) {
-        /* In case url is not .asx playlist */
+    /* Url is not asx playlist, play it directly */
+    if(rxAsx.indexIn(url) == -1)
         tracklistInterface->call("AddTrack", url, true);
-    } else {
-        /* Parse asx playlist */
-        QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(url)));
 
+    /* Otherwise parse asx playlist */
+    else {
+        QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(url)));
         connect(reply, SIGNAL(finished()), SLOT(processPlaylist()));
     }
 }
 
-void AmarokPlayer::processPlaylist()
-{
+void AmarokPlayer::processPlaylist() {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
     if(!reply) return;
 
@@ -53,6 +52,7 @@ void AmarokPlayer::processPlaylist()
         QString url = rxUrl.cap(1);
         tracklistInterface->call("AddTrack", url, true);
     }
+
     reply->deleteLater();
 }
 
