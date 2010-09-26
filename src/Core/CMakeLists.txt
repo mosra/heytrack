@@ -16,15 +16,7 @@ set(HeyTrack_Core_SRCS
     Style.cpp
 )
 
-if(NOT WIN32)
-    set(HeyTrack_Core_SRCS
-        ${HeyTrack_Core_SRCS}
-        VlcPlayer.cpp
-        AmarokPlayer.cpp
-    )
-endif()
-
-qt4_wrap_cpp(HeyTrack_Core_MOC
+set(HeyTrack_Core_HDRS
     AbstractServer.h
     AbRadioServer.h
     RockmaxServer.h
@@ -33,8 +25,22 @@ qt4_wrap_cpp(HeyTrack_Core_MOC
     StationModel.h
     FormatModel.h
     GenreModel.h
-    AmarokPlayer.h
 )
+
+if(NOT WIN32)
+    set(HeyTrack_Core_SRCS
+        ${HeyTrack_Core_SRCS}
+        VlcPlayer.cpp
+        AmarokPlayer.cpp
+    )
+
+    set(HeyTrack_Core_HDRS
+        ${HeyTrack_Core_HDRS}
+        AmarokPlayer.h
+    )
+endif()
+
+qt4_wrap_cpp(HeyTrack_Core_MOC ${HeyTrack_Core_HDRS})
 
 qt4_add_resources(HeyTrack_Core_QRC
     graphics/graphics.qrc
