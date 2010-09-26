@@ -1,6 +1,6 @@
 # Author: mosra <mosra@centrum.cz>
 pkgname=heytrack
-pkgver=0.99.70
+pkgver=0.99.71
 pkgrel=1
 pkgdesc="Simple utility for playing internet radio streams with track notification"
 arch=('i686' 'x86_64')
@@ -11,7 +11,7 @@ depends=('qt' 'qjson')
 makedepends=('cmake')
 conflicts=('heytrack-git')
 source=("http://github.com/mosra/${pkgname}/tarball/v${pkgver}/${pkgname}-${pkgver}.tar.gz")
-md5sums=('0a3cd87e43587f5ac9c94a675e736f4b')
+md5sums=('fcc72c76c1879078541cd975e7a67107')
 
 build() {
     mkdir -p "${srcdir}/build"
