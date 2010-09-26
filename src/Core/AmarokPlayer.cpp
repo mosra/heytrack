@@ -42,8 +42,7 @@ void AmarokPlayer::play(const QString& url) {
 }
 
 void AmarokPlayer::processPlaylist(QNetworkReply* reply) {
-    QRegExp rxUrl("<ref href\\s?=\\s?\"(.+)\"", Qt::CaseInsensitive);
-    rxUrl.setMinimal(true);
+    QRegExp rxUrl("<ref href\\s?=\\s?\"([^\"]+)\"", Qt::CaseInsensitive);
 
     if(rxUrl.indexIn(QString::fromLatin1(reply->readAll())) != -1) {
         QString url = rxUrl.cap(1);
