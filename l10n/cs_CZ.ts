@@ -30,42 +30,47 @@
 <context>
     <name>HeyTrack::Settings::SettingsDialog</name>
     <message>
-        <location filename="../src/Settings/SettingsDialog.cpp" line="37"/>
+        <location filename="../src/Settings/SettingsDialog.cpp" line="40"/>
         <source>HeyTrack settings</source>
         <translation>Nastavení HeyTrack</translation>
     </message>
     <message>
-        <location filename="../src/Settings/SettingsDialog.cpp" line="70"/>
+        <location filename="../src/Settings/SettingsDialog.cpp" line="97"/>
         <source>Server:</source>
         <translation>Server:</translation>
     </message>
     <message>
-        <location filename="../src/Settings/SettingsDialog.cpp" line="72"/>
+        <location filename="../src/Settings/SettingsDialog.cpp" line="95"/>
         <source>Player:</source>
         <translation>Přehrávač:</translation>
     </message>
     <message>
-        <location filename="../src/Settings/SettingsDialog.cpp" line="74"/>
+        <location filename="../src/Settings/SettingsDialog.cpp" line="80"/>
+        <source>Stream URL: &lt;em&gt;If your favourite player is not supported or no player is working, you can try to play this URL manually.&lt;/em&gt;</source>
+        <translation>Adresa streamu: &lt;em&gt;Jestliže váš oblíbený přehrávač není podporovaný nebo žádný přehrávač nefunguje, můžete zkusit přehrát tuto adresu sami.&lt;/em&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/SettingsDialog.cpp" line="99"/>
         <source>Genre:</source>
         <translation>Žánr:</translation>
     </message>
     <message>
-        <location filename="../src/Settings/SettingsDialog.cpp" line="76"/>
+        <location filename="../src/Settings/SettingsDialog.cpp" line="101"/>
         <source>Station:</source>
         <translation>Stanice:</translation>
     </message>
     <message>
-        <location filename="../src/Settings/SettingsDialog.cpp" line="78"/>
+        <location filename="../src/Settings/SettingsDialog.cpp" line="103"/>
         <source>Stream format:</source>
         <translation>Formát streamu:</translation>
     </message>
     <message>
-        <location filename="../src/Settings/SettingsDialog.cpp" line="170"/>
+        <location filename="../src/Settings/SettingsDialog.cpp" line="247"/>
         <source>Server error</source>
         <translation>Chyba serveru</translation>
     </message>
     <message>
-        <location filename="../src/Settings/SettingsDialog.cpp" line="171"/>
+        <location filename="../src/Settings/SettingsDialog.cpp" line="248"/>
         <source>An error occured during parsing server response:</source>
         <translation>Při zpracování odpovědi serveru došlo k chybě:</translation>
     </message>
@@ -73,48 +78,48 @@
 <context>
     <name>HeyTrack::Tray::HeyTrack</name>
     <message>
-        <location filename="../src/Tray/HeyTrack.cpp" line="41"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="44"/>
         <source>Initialization...</source>
         <translation>Inicializace...</translation>
     </message>
     <message>
-        <location filename="../src/Tray/HeyTrack.cpp" line="42"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="45"/>
         <source>Open settings</source>
         <translation>Otevřít nastavení</translation>
     </message>
     <message>
-        <location filename="../src/Tray/HeyTrack.cpp" line="65"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="68"/>
         <source>Settings</source>
         <translation>Nastavení</translation>
     </message>
     <message>
-        <location filename="../src/Tray/HeyTrack.cpp" line="68"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="71"/>
         <source>Play stream in player</source>
         <translation>Přehrát stream v přehrávači</translation>
     </message>
     <message>
-        <location filename="../src/Tray/HeyTrack.cpp" line="71"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="74"/>
         <source>Stop player</source>
         <translation>Zastavit přehrávač</translation>
     </message>
     <message>
-        <location filename="../src/Tray/HeyTrack.cpp" line="74"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="77"/>
         <source>Exit</source>
         <translation>Ukončit</translation>
     </message>
     <message>
-        <location filename="../src/Tray/HeyTrack.cpp" line="104"/>
-        <location filename="../src/Tray/HeyTrack.cpp" line="129"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="107"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="132"/>
         <source>%0: now playing</source>
         <translation>%0: právě se hraje</translation>
     </message>
     <message>
-        <location filename="../src/Tray/HeyTrack.cpp" line="131"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="133"/>
         <source>%0: </source>
         <translation>%0: </translation>
     </message>
     <message>
-        <location filename="../src/Tray/HeyTrack.cpp" line="139"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="141"/>
         <source>Server error</source>
         <translation>Chyba serveru</translation>
     </message>
