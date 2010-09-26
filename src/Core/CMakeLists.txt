@@ -20,6 +20,7 @@ if(NOT WIN32)
     set(HeyTrack_Core_SRCS
         ${HeyTrack_Core_SRCS}
         VlcPlayer.cpp
+        AmarokPlayer.cpp
     )
 endif()
 
@@ -32,6 +33,7 @@ qt4_wrap_cpp(HeyTrack_Core_MOC
     StationModel.h
     FormatModel.h
     GenreModel.h
+    AmarokPlayer.h
 )
 
 qt4_add_resources(HeyTrack_Core_QRC
