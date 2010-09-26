@@ -26,7 +26,6 @@
 #include "Core/Format.h"
 
 class QComboBox;
-class QCheckBox;
 class QSettings;
 class QLineEdit;
 class QPushButton;
@@ -71,6 +70,7 @@ class SettingsDialog: public QDialog {
             *formats;
 
         QPushButton* acceptButton;
+        QLineEdit* streamUrl;
 
     private slots:
         virtual void accept();      /**< @brief Accept dialog */
@@ -79,6 +79,7 @@ class SettingsDialog: public QDialog {
         void setPlayer(const QString& name);
         void setGenre(int index);
         void setStation(int index);
+        void setFormat(int index);
         void updateGenres(const QList<Core::Genre>& _genres);
         void updateStations(const QList<Core::Station>& _stations);
         void updateFormats(const QList<Core::Format>& _formats);

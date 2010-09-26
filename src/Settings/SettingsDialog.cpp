@@ -23,6 +23,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QMessageBox>
 #include <QtGui/QPushButton>
+#include <QtGui/QLineEdit>
 
 #include "Core/AbRadioServer.h"
 #include "Core/GenreModel.h"
@@ -39,7 +40,7 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, A
     setWindowTitle(tr("HeyTrack settings"));
     setWindowIcon(Style::style()->icon(Style::Settings));
 
-    /* Initialize comboboxes */
+    /* Initialize data fields */
     servers = new QComboBox;
     servers->addItems(AbstractServer::servers());
     players = new QComboBox;
@@ -47,6 +48,8 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, A
     genres = new QComboBox;
     stations = new QComboBox;
     formats = new QComboBox;
+    streamUrl = new QLineEdit;
+    streamUrl->setReadOnly(true);
 
     /* Initialize server (and get genre list) */
     if(settings->contains("server"))
@@ -73,6 +76,13 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, A
     logoLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
     logoLabel->setMinimumWidth(140);
 
+    /* Label for stream URL */
+    QLabel* streamUrlLabel = new QLabel(tr("Stream URL: "
+        "<em>If you haven't supported player or no player is working, "
+        "you can try to play this URL manually.</em>"));
+    streamUrlLabel->setWordWrap(true);
+    streamUrlLabel->setAlignment(Qt::AlignJustify|Qt::AlignVCenter);
+
     /* Buttons */
     QDialogButtonBox* buttons =
         new QDialogButtonBox(QDialogButtonBox::Save|QDialogButtonBox::Cancel);
@@ -81,7 +91,7 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, A
     acceptButton = buttons->button(QDialogButtonBox::Save);
 
     QGridLayout* layout = new QGridLayout(this);
-    layout->addWidget(logoLabel, 0, 0, 5, 1);
+    layout->addWidget(logoLabel, 0, 0, 6, 1);
     layout->addWidget(new QLabel(tr("Player:")), 0, 1);
     layout->addWidget(players, 0, 2);
     layout->addWidget(new QLabel(tr("Server:")), 1, 1);
@@ -92,7 +102,9 @@ SettingsDialog::SettingsDialog(QSettings* _settings, AbstractServer** _server, A
     layout->addWidget(stations, 3, 2);
     layout->addWidget(new QLabel(tr("Stream format:")), 4, 1);
     layout->addWidget(formats, 4, 2);
-    layout->addWidget(buttons, 5, 0, 1, 3);
+    layout->addWidget(streamUrlLabel, 5, 1, 1, 2);
+    layout->addWidget(streamUrl, 6, 1, 1, 2);
+    layout->addWidget(buttons, 7, 0, 1, 3);
     layout->setColumnStretch(0, 0);
     layout->setColumnStretch(1, 0);
     layout->setColumnStretch(2, 1);
@@ -147,10 +159,11 @@ void SettingsDialog::setServer(const QString& name) {
     connect(selectedServer, SIGNAL(formats(QList<Core::Format>)), SLOT(updateFormats(QList<Core::Format>)));
     connect(selectedServer, SIGNAL(error(QString)), SLOT(error(QString)));
 
-    /* Clear genres, stations and formats for new list */
+    /* Clear subsequent fields for new list */
     genres->clear();
     stations->clear();
     formats->clear();
+    streamUrl->clear();
 
     selectedServer->getGenres();
 }
@@ -163,6 +176,7 @@ void SettingsDialog::setPlayer(const QString& name) {
 void SettingsDialog::setGenre(int index) {
     stations->clear();
     formats->clear();
+    streamUrl->clear();
 
     if(index != -1)
         selectedServer->getStations(qobject_cast<GenreModel*>(genres->model())->genre(index));
@@ -170,9 +184,18 @@ void SettingsDialog::setGenre(int index) {
 
 void SettingsDialog::setStation(int index) {
     formats->clear();
+    streamUrl->clear();
 
     if(index != -1)
         selectedServer->getFormats(qobject_cast<StationModel*>(stations->model())->station(index));
+}
+
+void SettingsDialog::setFormat(int index) {
+    if(index == -1) return;
+
+    streamUrl->setText(selectedServer->streamUrl(
+        qobject_cast<StationModel*>(stations->model())->station(index),
+        qobject_cast<FormatModel*>(formats->model())->format(index)));
 }
 
 void SettingsDialog::updateGenres(const QList<Genre>& _genres) {
@@ -204,6 +227,8 @@ void SettingsDialog::updateStations(const QList<Station>& _stations) {
 }
 
 void SettingsDialog::updateFormats(const QList<Format>& _formats) {
+    disconnect(formats, SIGNAL(currentIndexChanged(int)), this, SLOT(setFormat(int)));
+
     /** @bug Replies doesn't always come in the same order as requests -
             fill the combobox with only the last requested reply */
     FormatModel* m = new FormatModel(_formats, formats);
@@ -212,6 +237,9 @@ void SettingsDialog::updateFormats(const QList<Format>& _formats) {
     /* Set format to user saved */
     if(settings->contains("format/id") && settings->value("station/id") == stations->itemData(stations->currentIndex()))
         formats->setCurrentIndex(formats->findData(settings->value("format/id", 0), FormatModel::Id));
+    setFormat(formats->currentIndex());
+
+    connect(formats, SIGNAL(currentIndexChanged(int)), SLOT(setFormat(int)));
 }
 
 void SettingsDialog::error(const QString& message) {
