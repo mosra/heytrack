@@ -30,6 +30,7 @@ class VlcPlayer: public AbstractPlayer {
 
     public:
         VlcPlayer(QObject* parent = 0);
+        virtual bool isPlaying();
         virtual void play(const QString& url);
         virtual void stop();
 

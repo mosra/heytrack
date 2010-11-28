@@ -59,7 +59,7 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent), server(0), player(0) {
     tray = new QSystemTrayIcon(this);
     tray->setIcon(Style::style()->bigIcon(Style::HeyTrack));
     connect(tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-            this, SLOT(toggleVisibility(QSystemTrayIcon::ActivationReason)));
+            this, SLOT(handleTrayClick(QSystemTrayIcon::ActivationReason)));
 
     /* Tray icon context menu */
     QMenu* menu = new QMenu(this);
@@ -145,9 +145,17 @@ void HeyTrack::error(const QString& message) {
     timer->start(60*1000);
 }
 
-void HeyTrack::toggleVisibility(QSystemTrayIcon::ActivationReason reason) {
-    if(reason == QSystemTrayIcon::Trigger)
-        isHidden() ? show() : hide();
+void HeyTrack::handleTrayClick(QSystemTrayIcon::ActivationReason reason) {
+    switch(reason) {
+        /* Left click -> toggle visibility */
+        case QSystemTrayIcon::Trigger:
+            isHidden() ? show() : hide();
+            break;
+        /* Middle click -> toggle playing */
+        case QSystemTrayIcon::MiddleClick:
+            player->isPlaying() ? stop() : play();
+            break;
+    }
 }
 
 void HeyTrack::openSettings() {

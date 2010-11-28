@@ -28,6 +28,10 @@ AmarokPlayer::AmarokPlayer(QObject* parent): AbstractPlayer(parent), manager(new
     tracklistInterface = new QDBusInterface("org.kde.amarok", "/TrackList", "", QDBusConnection::sessionBus(), this);
 }
 
+bool AmarokPlayer::isPlaying() {
+    return playerInterface->property("PlaybackStatus").toString() == "Playing";
+}
+
 void AmarokPlayer::play(const QString& url) {
     QRegExp rxAsx("\\.asx$");
 

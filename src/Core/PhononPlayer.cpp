@@ -30,6 +30,10 @@ PhononPlayer::PhononPlayer(QObject* parent): AbstractPlayer(parent)
     Phonon::createPath(mo, ao);
 }
 
+bool PhononPlayer::isPlaying() {
+    return mo->state() == Phonon::PlayingState;
+}
+
 void PhononPlayer::play(const QString& url) {
     QUrl _url(url);
     mo->setCurrentSource(_url);

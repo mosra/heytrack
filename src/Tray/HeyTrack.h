@@ -88,12 +88,12 @@ class HeyTrack: public QWidget {
         void error(const QString& message);
 
         /**
-         * @brief Show / hide window
+         * @brief Handle tray click
          *
-         * Toggles visibility only after clicking on tray icon.
+         * Handles clicking on tray icon
          * @param reason    Activation reason
          */
-        void toggleVisibility(QSystemTrayIcon::ActivationReason reason);
+        void handleTrayClick(QSystemTrayIcon::ActivationReason reason);
 
         /**
          * @brief Open settings dialog

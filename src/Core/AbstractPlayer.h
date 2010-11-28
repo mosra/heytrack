@@ -2,6 +2,7 @@
 #define HeyTrack_Core_AbstractPlayer_h
 /*
     Copyright © 2009, 2010 Vladimír Vondruš <mosra@centrum.cz>
+    Copyright © 2010 Jan Dupal <dupal.j@seznam.cz>
 
     This file is part of HeyTrack.
 
@@ -34,6 +35,8 @@ class AbstractPlayer: public QObject {
         static AbstractPlayer* instance(const QString& name, QObject* parent = 0);
 
         inline AbstractPlayer(QObject* parent = 0): QObject(parent) {}
+
+        virtual bool isPlaying() = 0;
 
     public slots:
         /**

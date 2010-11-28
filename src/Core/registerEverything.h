@@ -1,5 +1,6 @@
 /*
     Copyright © 2009, 2010 Vladimír Vondruš <mosra@centrum.cz>
+    Copyright © 2010 Jan Dupal <dupal.j@seznam.cz>
 
     This file is part of HeyTrack.
 
@@ -23,6 +24,7 @@
 #ifndef Q_WS_WIN
 #include "VlcPlayer.h"
 #include "AmarokPlayer.h"
+#include "Mpris1.h"
 #endif
 
 namespace HeyTrack { namespace Core {
@@ -35,6 +37,8 @@ inline void registerEverything() {
 
     /* D-BUS is Unix-only */
     #ifndef Q_WS_WIN
+    qDBusRegisterMetaType<Mpris1::Status>();
+
     PLAYER_REGISTER("VLC", VlcPlayer)
     PLAYER_REGISTER("Amarok", AmarokPlayer)
     #endif

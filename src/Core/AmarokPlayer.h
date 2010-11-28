@@ -39,6 +39,7 @@ class AmarokPlayer: public AbstractPlayer {
 
     public:
         AmarokPlayer(QObject* parent = 0);
+        virtual bool isPlaying();
         virtual void play(const QString& url);
         virtual void stop();
 

@@ -37,6 +37,7 @@ class PhononPlayer: public AbstractPlayer {
 
     public:
         PhononPlayer(QObject* parent = 0);
+        virtual bool isPlaying();
         virtual void play(const QString& url);
         virtual void stop();
 
