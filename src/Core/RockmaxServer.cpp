@@ -34,6 +34,7 @@ RockmaxServer::~RockmaxServer() {
 
 void RockmaxServer::getStations(const Genre& genre) {
     QList<Station> list;
+    list.append(Station(0, "rockmax", "Rockmax Live"));
     list.append(Station(1, "old", "Rockmax Oldies"));
     list.append(Station(2, "hard", "Rockmax Hard"));
     emit stations(list);
@@ -48,7 +49,11 @@ void RockmaxServer::getFormats(const Station& station) {
 }
 
 void RockmaxServer::getTrack(const Station& station) {
-    QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(QString("http://www.rockmax.cz/stream_%0/load_song_flash.php").arg(station.nick()))));
+    QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(
+	station.id() > 0 
+	    ? QString("http://www.rockmax.cz/stream_%0/all_songs_%0.txt").arg(station.nick())
+	    : QString("http://www.rockmax.cz/stream_live/all_songs.txt")
+    )));
     connect(reply, SIGNAL(finished()), SLOT(processTrack()));
 }
 
@@ -60,7 +65,7 @@ void RockmaxServer::processTrack() {
     reply->deleteLater();
 
     /* Regexp for getting song artist and title */
-    QRegExp rxSong("songactual=(.+) - (.+)&songactualcas");
+    QRegExp rxSong("(?:songactual|hraje)=(.+) -\s?(.*)&(?:songactualcas|hralo)");
     int songPos = rxSong.indexIn(content);
     if(songPos == -1) {
         emit error("Cannot parse song name");
@@ -80,8 +85,8 @@ void RockmaxServer::processTrack() {
 }
 
 QString RockmaxServer::streamUrl(const Station& station, const Format& format) const {
-    return QString("http://212.111.2.151:8011/rm_%0_%1.mp3")
-        .arg(station.nick()).arg(format.nick());
+    return QString("http://212.111.2.151:8000/%0%1_%2.mp3")
+        .arg(station.id()>0 ? "rm_":"").arg(station.nick()).arg(format.nick());
 }
 
 }}
