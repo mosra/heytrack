@@ -116,7 +116,7 @@ void AbRadioServer::processFormats() {
     query.evaluateTo(&src);
 
     /* Regexp for getting nick from src */
-    QRegExp rxNick("/([^\\d/]+)(?:\\d+)\\.asx");
+    QRegExp rxNick("/([^\\d/]+)(?:\\d+).*\\.asx");
     int nickPos = rxNick.indexIn(src);
     if(nickPos == -1) {
         emit error("Cannot parse format list");
