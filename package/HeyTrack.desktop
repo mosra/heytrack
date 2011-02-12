@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=HeyTrack
+GenericName=Radio player
+Comment=Internet radio stream player
+Exec=heytrack
+Icon=heytrack
+Categories=AudioVideo;Audio;Network;Qt
+Terminal=false
+
+GenericName[cs]=Přehrávač rádií
+Comment[cs]=Přehrávač internetových rádií

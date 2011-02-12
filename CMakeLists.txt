@@ -14,8 +14,10 @@ else()
     set(HEYTRACK_TRANSLATION_DIR ${CMAKE_INSTALL_PREFIX}/share/heytrack/l10n)
 endif()
 
-add_subdirectory(src)
+add_subdirectory(graphics)
 add_subdirectory(l10n)
+add_subdirectory(package)
+add_subdirectory(src)
 
 #
 # CPack configuration
