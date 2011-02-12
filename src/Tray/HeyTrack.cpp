@@ -114,8 +114,8 @@ void HeyTrack::initialize() {
         settingsButton->setVisible(true);
         nowPlaying->setVisible(false);
 
-        setWindowTitle("HeyTrack");
-        tray->setToolTip("HeyTrack");
+        setWindowTitle(tr("HeyTrack"));
+        tray->setToolTip(tr("HeyTrack"));
 
         /* Stop all track updates */
         timer->stop();
@@ -139,7 +139,7 @@ void HeyTrack::track(Track t) {
 void HeyTrack::error(const QString& message) {
     tray->setToolTip("");
     tray->showMessage(tr("Server error"), message);
-    nowPlaying->setText("<strong>Server error:</strong> " + message);
+    nowPlaying->setText(QString("<strong>%0</strong> %1").arg(tr("Server error")).arg(message));
 
     /* Wait a minute... */
     timer->start(60*1000);
