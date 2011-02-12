@@ -1,7 +1,7 @@
 #ifndef HeyTrack_Core_AbRadioServer_h
 #define HeyTrack_Core_AbRadioServer_h
 /*
-    Copyright © 2009, 2010 Vladimír Vondruš <mosra@centrum.cz>
+    Copyright © 2009, 2010, 2011 Vladimír Vondruš <mosra@centrum.cz>
 
     This file is part of HeyTrack.
 
