@@ -50,7 +50,7 @@ void RockmaxServer::getFormats(const Station& station) {
 
 void RockmaxServer::getTrack(const Station& station) {
     QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(
-	station.id() > 0 
+	station.id() > 0
 	    ? QString("http://www.rockmax.cz/stream_%0/all_songs_%0.txt").arg(station.nick())
 	    : QString("http://www.rockmax.cz/stream_live/all_songs.txt")
     )));
@@ -65,16 +65,27 @@ void RockmaxServer::processTrack() {
     reply->deleteLater();
 
     /* Regexp for getting song artist and title */
-    QRegExp rxSong("(?:songactual|hraje)=(.+) -\s?(.*)&(?:songactualcas|hralo)");
+    QRegExp rxSong("(?:songactual|hraje)=(.*)&(?:songactualcas|hralo)");
     int songPos = rxSong.indexIn(content);
     if(songPos == -1) {
         emit error("Cannot parse song name");
         return;
     }
 
+    QString song = rxSong.cap(1);
+    if(song == "neco jineho nez hudba -")
+        return;
+
+    QRegExp rxSplit("(.+) - (.+)");
+    songPos = rxSplit.indexIn(song);
+    if(songPos == -1) {
+        emit error("Cannot parse song name");
+        return;
+    }
+
     /* If current artist and title is the same as in last check, exit */
-    QString currentArtist = rxSong.cap(1),
-        currentTitle = rxSong.cap(2);
+    QString currentArtist = rxSplit.cap(1),
+        currentTitle = rxSplit.cap(2);
     if(currentArtist == lastArtist && currentTitle == lastTitle) return;
 
     /* Save artist and title for next check */
