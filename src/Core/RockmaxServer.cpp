@@ -50,9 +50,7 @@ void RockmaxServer::getFormats(const Station& station) {
 
 void RockmaxServer::getTrack(const Station& station) {
     QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(
-	station.id() > 0
-	    ? QString("http://www.rockmax.cz/stream_%0/all_songs_%0.txt").arg(station.nick())
-	    : QString("http://www.rockmax.cz/stream_live/all_songs.txt")
+        QString("http://www.rockmax.cz/stream_%0/all_songs.txt").arg(station.nick())
     )));
     connect(reply, SIGNAL(finished()), SLOT(processTrack()));
 }
