@@ -194,7 +194,7 @@ void SettingsDialog::setFormat(int index) {
     if(index == -1) return;
 
     streamUrl->setText(selectedServer->streamUrl(
-        qobject_cast<StationModel*>(stations->model())->station(index),
+        qobject_cast<StationModel*>(stations->model())->station(stations->currentIndex()),
         qobject_cast<FormatModel*>(formats->model())->format(index)));
 }
 
