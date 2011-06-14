@@ -34,7 +34,7 @@ RockmaxServer::~RockmaxServer() {
 
 void RockmaxServer::getStations(const Genre& genre) {
     QList<Station> list;
-    list.append(Station(0, "rockmax", "Rockmax Live"));
+    list.append(Station(0, "live", "Rockmax Live"));
     list.append(Station(1, "old", "Rockmax Oldies"));
     list.append(Station(2, "hard", "Rockmax Hard"));
     emit stations(list);
@@ -94,8 +94,8 @@ void RockmaxServer::processTrack() {
 }
 
 QString RockmaxServer::streamUrl(const Station& station, const Format& format) const {
-    return QString("http://212.111.2.151:8000/%0%1_%2.mp3")
-        .arg(station.id()>0 ? "rm_":"").arg(station.nick()).arg(format.nick());
+    return QString("http://212.111.2.151:8000/%0_%1.mp3")
+        .arg(station.id() == 0 ? "rockmax" : "rm_"+station.nick()).arg(format.nick());
 }
 
 }}
