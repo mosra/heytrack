@@ -74,7 +74,8 @@ void RockmaxServer::processTrack() {
     if(song == "neco jineho nez hudba -  ")
         return;
 
-    QRegExp rxSplit("(.+) - (.+)");
+    /* Some songs (esp. on Rockmax Hard) have an underscore in front of them */
+    QRegExp rxSplit("_?([^_].*) - (.+)");
     songPos = rxSplit.indexIn(song);
     if(songPos == -1) {
         emit error("Cannot parse song name");
