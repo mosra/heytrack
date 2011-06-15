@@ -71,7 +71,7 @@ void RockmaxServer::processTrack() {
     }
 
     QString song = rxSong.cap(1);
-    if(song == "neco jineho nez hudba -")
+    if(song == "neco jineho nez hudba -  ")
         return;
 
     QRegExp rxSplit("(.+) - (.+)");
