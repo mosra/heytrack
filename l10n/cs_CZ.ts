@@ -98,28 +98,40 @@
         <translation>Přehrát stream v přehrávači</translation>
     </message>
     <message>
+        <location filename="../src/Tray/HeyTrack.cpp" line="77"/>
+        <source>Stop until next track</source>
+        <translation>Zastavit do další skladby</translation>
+    </message>
+    <message>
         <location filename="../src/Tray/HeyTrack.cpp" line="74"/>
         <source>Stop player</source>
         <translation>Zastavit přehrávač</translation>
     </message>
     <message>
-        <location filename="../src/Tray/HeyTrack.cpp" line="77"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="80"/>
         <source>Exit</source>
         <translation>Ukončit</translation>
     </message>
     <message>
-        <location filename="../src/Tray/HeyTrack.cpp" line="107"/>
-        <location filename="../src/Tray/HeyTrack.cpp" line="132"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="110"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="140"/>
         <source>%0: now playing</source>
         <translation>%0: právě se hraje</translation>
     </message>
     <message>
-        <location filename="../src/Tray/HeyTrack.cpp" line="133"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="120"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="121"/>
+        <source>HeyTrack</source>
+        <translation>HeyTrack</translation>
+    </message>
+    <message>
+        <location filename="../src/Tray/HeyTrack.cpp" line="141"/>
         <source>%0: </source>
         <translation>%0: </translation>
     </message>
     <message>
-        <location filename="../src/Tray/HeyTrack.cpp" line="141"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="149"/>
+        <location filename="../src/Tray/HeyTrack.cpp" line="150"/>
         <source>Server error</source>
         <translation>Chyba serveru</translation>
     </message>
