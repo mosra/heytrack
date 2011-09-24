@@ -35,7 +35,7 @@ namespace HeyTrack { namespace Tray {
 using namespace Core;
 using namespace Settings;
 
-HeyTrack::HeyTrack(QWidget* parent): QWidget(parent), server(0), player(0) {
+HeyTrack::HeyTrack(QWidget* parent): QWidget(parent), server(0), player(0), stoppedUntilNextTrack(false) {
     settings.setIniCodec("UTF-8");
 
     /* Initalize style */
@@ -72,6 +72,9 @@ HeyTrack::HeyTrack(QWidget* parent): QWidget(parent), server(0), player(0) {
     menu->addAction(
         Style::style()->icon(Style::Stop),
         tr("Stop player"), this, SLOT(stop()));
+    menu->addAction(
+        Style::style()->icon(Style::Stop),
+        tr("Stop until next track"), this, SLOT(stopUntilNextTrack()));
     menu->addAction(
         Style::style()->icon(Style::Exit),
         tr("Exit"), qApp, SLOT(quit()));
@@ -125,6 +128,11 @@ void HeyTrack::initialize() {
 void HeyTrack::getTrack() { server->getTrack(station); }
 
 void HeyTrack::track(Track t) {
+    if(stoppedUntilNextTrack) {
+        stoppedUntilNextTrack = false;
+        play();
+    }
+
     /* Update window label */
     nowPlaying->setText("<strong>" + t.artist() + "</strong> - " + t.title());
 
@@ -171,6 +179,12 @@ void HeyTrack::play() {
 void HeyTrack::stop() {
     if(!player) return;
     player->stop();
+}
+
+void HeyTrack::stopUntilNextTrack() {
+    stop();
+
+    stoppedUntilNextTrack = true;
 }
 
 }}

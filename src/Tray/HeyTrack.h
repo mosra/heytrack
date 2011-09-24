@@ -63,6 +63,13 @@ class HeyTrack: public QWidget {
 
         QSettings settings;             /**< @brief Settings */
 
+        /**
+         * @brief If the player is stopped until next track
+         *
+         * See also stopUntilNextTrack().
+         */
+        bool stoppedUntilNextTrack;
+
     private slots:
         /**
          * @brief Initialize
@@ -107,6 +114,14 @@ class HeyTrack: public QWidget {
 
         /** @brief Stop player */
         void stop();
+
+        /**
+         * @brief Stop until next track
+         *
+         * Stops the player and starts playing again on the next track. Usable
+         * for e.g. skipping commercials.
+         */
+        void stopUntilNextTrack();
 };
 
 }}
