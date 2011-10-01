@@ -179,6 +179,8 @@ void HeyTrack::play() {
 void HeyTrack::stop() {
     if(!player) return;
     player->stop();
+
+    stoppedUntilNextTrack = false;
 }
 
 void HeyTrack::stopUntilNextTrack() {
