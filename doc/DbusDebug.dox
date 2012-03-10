@@ -1,0 +1,12 @@
+/** @page DbusDebug Debugging D-BUS interfaces
+
+Easiest way to debug D-BUS calls is to start the application with
+`QDBUS_DEBUG=1` environment variable:
+
+    QDBUS_DEBUG=1 heytrack
+
+VLC is also Qt-based, so it can be applied to it, too:
+
+    QDBUS_DEBUG=1 vlc
+
+*/
