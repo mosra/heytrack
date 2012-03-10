@@ -24,12 +24,13 @@
 namespace HeyTrack { namespace Core {
 
 VlcPlayer::VlcPlayer(QObject* parent): AbstractPlayer(parent) {
-    playerInterface = new QDBusInterface("org.mpris.vlc", "/Player", "", QDBusConnection::sessionBus(), this);
-    tracklistInterface = new QDBusInterface("org.mpris.vlc", "/TrackList", "", QDBusConnection::sessionBus(), this);
+    playerInterface = new QDBusInterface("org.mpris.MediaPlayer2.vlc", "/Player", "", QDBusConnection::sessionBus(), this);
+    tracklistInterface = new QDBusInterface("org.mpris.MediaPlayer2.vlc", "/TrackList", "", QDBusConnection::sessionBus(), this);
 }
 
 bool VlcPlayer::isPlaying() {
-    QDBusReply<Mpris1::Status> reply = playerInterface->call("GetStatus");
+    /** @todo wtf Mpris1 */
+    QDBusReply<Mpris1::Status> reply = playerInterface->call("PlaybackStatus");
 
     if(reply.isValid())
         return reply.value().play == 0;
