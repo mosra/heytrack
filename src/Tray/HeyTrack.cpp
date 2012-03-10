@@ -140,8 +140,8 @@ void HeyTrack::track(Track t) {
     tray->showMessage(tr("%0: now playing").arg(station.name()), t.artist() + " - " + t.title());
     tray->setToolTip(tr("%0: ").arg(station.name()) + t.artist() + " - " + t.title());
 
-    /* Next update after 20 seconds */
-    timer->start(20*1000);
+    /* Next update after 7 seconds */
+    timer->start(7*1000);
 }
 
 void HeyTrack::error(const QString& message) {
