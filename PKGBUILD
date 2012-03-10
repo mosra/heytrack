@@ -15,7 +15,9 @@ build() {
     mkdir -p "$startdir/build"
     cd "$startdir/build"
 
-    cmake -DCMAKE_INSTALL_PREFIX=/usr ..
+    cmake .. \
+         -DCMAKE_INSTALL_PREFIX=/usr \
+         -DCMAKE_BUILD_TYPE=Debug
     make
 }
 
