@@ -1,6 +1,6 @@
 find_package(Qt4 REQUIRED)
 
-include_directories(${HeyTrack_SOURCE_DIR}/src ${HeyTrack_BINARY_DIR}/src)
+include_directories(${QT_INCLUDE_DIR} ${HeyTrack_SOURCE_DIR}/src ${HeyTrack_BINARY_DIR}/src)
 
 set(HeyTrack_Tray_SRCS
     HeyTrack.cpp

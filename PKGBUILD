@@ -7,7 +7,7 @@ arch=('i686' 'x86_64')
 url="http://github.com/mosra/heytrack.git"
 license=('LGPLv3')
 groups=()
-depends=('qt' 'qjson')
+depends=('qt4' 'qjson')
 makedepends=('cmake')
 optdepends=('kdebase-workspace')
 

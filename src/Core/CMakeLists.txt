@@ -1,7 +1,8 @@
 find_package(Qt4 REQUIRED)
+find_package(Phonon REQUIRED)
 find_package(QJSON REQUIRED)
 
-include_directories(${QJSON_INCLUDE_DIRS} ${QT_PHONON_INCLUDE_DIR})
+include_directories(${QT_INCLUDE_DIR} ${QJSON_INCLUDE_DIRS} ${PHONON_INCLUDE_DIR})
 
 set(HeyTrack_Core_SRCS
     AbstractServer.cpp
