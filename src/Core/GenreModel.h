@@ -35,7 +35,7 @@ class GenreModel: public QAbstractListModel {
     public:
         inline GenreModel(const QList<Genre>& _genres, QObject* parent = 0): QAbstractListModel(parent), genres(_genres) {}
 
-        inline virtual int rowCount(const QModelIndex& parent = QModelIndex()) const
+        inline virtual int rowCount(const QModelIndex& = QModelIndex()) const
             { return genres.count()+1; }
 
         virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;

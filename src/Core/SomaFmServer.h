@@ -46,7 +46,7 @@ class SomaFmServer: public AbstractServer {
         virtual void getStations(const Genre& genre = Genre());
         virtual void getFormats(const Station& station);
         virtual void getTrack(const Station& station);
-        inline virtual QString streamUrl(const Station& station, const Format& format) const { return format.nick(); }
+        inline virtual QString streamUrl(const Station&, const Format& format) const { return format.nick(); }
 
     private slots:
         virtual void processGenres();

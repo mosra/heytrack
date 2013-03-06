@@ -40,7 +40,7 @@ class FormatModel: public QAbstractListModel {
 
         inline FormatModel(const QList<Format>& _formats, QObject* parent = 0): QAbstractListModel(parent), formats(_formats) {}
 
-        inline virtual int rowCount(const QModelIndex& parent = QModelIndex()) const
+        inline virtual int rowCount(const QModelIndex& = QModelIndex()) const
             { return formats.count(); }
 
         virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;

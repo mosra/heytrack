@@ -32,7 +32,7 @@ RockmaxServer::~RockmaxServer() {
     delete decoder;
 }
 
-void RockmaxServer::getStations(const Genre& genre) {
+void RockmaxServer::getStations(const Genre&) {
     QList<Station> list;
     list.append(Station(0, "live", "Rockmax Live"));
     list.append(Station(1, "old", "Rockmax Oldies"));
@@ -40,7 +40,7 @@ void RockmaxServer::getStations(const Genre& genre) {
     emit stations(list);
 }
 
-void RockmaxServer::getFormats(const Station& station) {
+void RockmaxServer::getFormats(const Station&) {
     QList<Format> list;
     list.append(Format(1, "64", QString("MP3 %0 kbps").arg(64)));
     list.append(Format(2, "128", QString("MP3 %0 kbps").arg(128)));

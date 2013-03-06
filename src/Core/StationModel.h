@@ -40,7 +40,7 @@ class StationModel: public QAbstractListModel {
 
         inline StationModel(const QList<Station>& _stations, QObject* parent = 0): QAbstractListModel(parent), stations(_stations) {}
 
-        inline virtual int rowCount(const QModelIndex& parent = QModelIndex()) const
+        inline virtual int rowCount(const QModelIndex& = QModelIndex()) const
             { return stations.count(); }
 
         virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
