@@ -35,4 +35,6 @@ AbstractServer* AbstractServer::instance(const QString& name, QObject* parent) {
     return _servers[name](parent);
 }
 
+AbstractServer::AbstractServer(QObject* parent): QObject(parent), manager(new QNetworkAccessManager(this)) {}
+
 }}

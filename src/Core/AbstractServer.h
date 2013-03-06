@@ -50,7 +50,7 @@ class AbstractServer: public QObject {
          *
          * @param parent    Parent object
          */
-        inline AbstractServer(QObject* parent = 0): QObject(parent), manager(new QNetworkAccessManager(this)) {}
+        AbstractServer(QObject* parent = 0);
 
     public slots:
         /**
